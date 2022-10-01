@@ -13,10 +13,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   get_storage:
-  cloud_firestore: ^3.5.0
-  firebase_auth: ^3.11.0
-  firebase_storage: ^10.3.10
-  google_sign_in: ^5.4.2
+#  cloud_firestore: ^3.5.0
+#  firebase_auth: ^3.11.0
+#  firebase_storage: ^10.3.10
+#  google_sign_in: ^5.4.2
 
 dev_dependencies:
   flutter_test:
