@@ -5,6 +5,6 @@ class InitialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.orange,);
+    return Scaffold(appBar: AppBar(title: Text("kkk"),),);
   }
 }
