@@ -19,6 +19,7 @@ dependencies:
 #  google_sign_in: ^5.4.2
   animated_splash_screen: ^1.3.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -30,6 +31,7 @@ flutter:
 
   assets:
      - assets/images/logo-konsi.png
+     - assets/images/google-logo.png
 
 
   # fonts:
