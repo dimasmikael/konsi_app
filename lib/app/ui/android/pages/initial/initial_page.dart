@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 
 import 'package:konsi_app/app/ui/android/pages/login/login_page.dart';
+import 'package:konsi_app/app/ui/android/pages/login/registration_page.dart';
 import 'package:page_transition/page_transition.dart' show PageTransitionType;
 
 class InitialPage extends StatelessWidget {
@@ -11,7 +12,10 @@ class InitialPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetSizeConfig().init(context);
-    return Stack(
+    return
+
+
+      Stack(
       children: [
         AnimatedSplashScreen(
           splash: Image.asset(
@@ -19,7 +23,7 @@ class InitialPage extends StatelessWidget {
             fit: BoxFit.contain,
             width: WidgetSizeConfig.safeBlockHorizontal! * 60,
           ),
-          nextScreen: const LoginPage(),
+          nextScreen: const RegistrationPage(),
           splashTransition: SplashTransition.scaleTransition,
           pageTransitionType: PageTransitionType.leftToRight,
           backgroundColor: Colors.white,
