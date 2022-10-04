@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "711975092778",
+    "project_id": "konsiapp",
+    "storage_bucket": "konsiapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711975092778:android:a48924b246647826003953",
+        "android_client_info": {
+          "package_name": "com.example.konsi_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711975092778-j7hm4k550t365sj0o2r1dm2kag5m9nf6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.konsi_app",
+            "certificate_hash": "6ed6c96fc3817bb11c3ef6471de3b155ecb08398"
+          }
+        },
+        {
+          "client_id": "711975092778-mg17n7ie7rnffgja7mk8pnnn5tgeaalo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2gWjl6fVGx05i1qNp3o6BU_OmTjs6ceM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711975092778-mg17n7ie7rnffgja7mk8pnnn5tgeaalo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
