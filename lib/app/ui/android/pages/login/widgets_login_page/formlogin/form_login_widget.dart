@@ -43,9 +43,61 @@ class _FormLoginWidgetState extends State<FormLoginWidget> {
                 'Entre com o  Google',
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignInWithText() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const <Widget>[
+        Text(
+          '- OU -',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        SizedBox(height: 20.0),
+        Text(
+          'Entrar com',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignupBtn() {
+    return GestureDetector(
+      onTap: () => print('Sign Up Button Pressed'),
+      child: RichText(
+        text: const TextSpan(
+          children: [
+            TextSpan(
+              text: 'Não tem conta? ',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            TextSpan(
+              text: 'Clique aqui',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
@@ -58,66 +110,56 @@ class _FormLoginWidgetState extends State<FormLoginWidget> {
   Widget build(BuildContext context) {
     WidgetSizeConfig().init(context);
     return Column(
-      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      // crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // const SizedBox(),
-
-        const SizedBox(),
-        Column(
-          children: [
-            textFormSignIn(
-              'Entrar',
-            ),
-            CustomInputForm(
-              icon: Icons.email_outlined,
-              hint: "Email",
-              keyboardType: TextInputType.emailAddress,
-              obscureText: false,
-            ),
-            CustomInputForm(
-                icon: Icons.lock_outline,
-                suffixIcon: IconButton(
-                  color: Colors.black.withOpacity(.7),
-                  onPressed: () {
-                    setState(
-                      () {
-                        _isObscure = !_isObscure;
-                      },
-                    );
+        textFormSignIn(
+          'Entrar',
+        ),
+        const SizedBox(height: 10.0),
+        textLabelInput(
+          'Email',
+        ),
+        CustomInputForm(
+          icon: Icons.email_outlined,
+          hint: "Email",
+          keyboardType: TextInputType.emailAddress,
+          obscureText: false,
+        ),
+        textLabelInput(
+          'Senha',
+        ),
+        CustomInputForm(
+            icon: Icons.lock_outline,
+            suffixIcon: IconButton(
+              color: Colors.black.withOpacity(.7),
+              onPressed: () {
+                setState(
+                  () {
+                    _isObscure = !_isObscure;
                   },
-                  icon: Icon(
-                    _isObscure ? Icons.visibility : Icons.visibility_off,
-                  ),
-                ),
-                hint: "Senha",
-                keyboardType: TextInputType.text,
-                obscureText: _isObscure),
-            CustomdButtonFormWidget(
-              buttonText: 'Entrar',
-              width: WidgetSizeConfig.screenWidth! * 10,
-              onpressed: () {},
+                );
+              },
+              icon: Icon(
+                _isObscure ? Icons.visibility : Icons.visibility_off,
+              ),
             ),
-          ],
+            hint: "Senha",
+            keyboardType: TextInputType.text,
+            obscureText: _isObscure),
+        CustomdButtonFormWidget(
+          buttonText: 'Entrar',
+          width: WidgetSizeConfig.screenWidth! * 10,
+          onpressed: () {},
         ),
-        Column(
-          children: [
-            textGoogle(
-              'Ou, entre com sua conta do google',
-            ),
-            _buttonGoogle()
-          ],
+        _buildSignInWithText(),
+        const SizedBox(
+          height: 5,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Não tem conta?',
-            ),
-            TextButton(onPressed: () {}, child: const Text('Cadastre-se'))
-          ],
+        _buttonGoogle(),
+        const SizedBox(
+          height: 10,
         ),
+        _buildSignupBtn()
       ],
     );
   }

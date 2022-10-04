@@ -30,26 +30,38 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      //  extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.yellow,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: SizedBox(
         height: WidgetSizeConfig.screenHeight,
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 60.0,
+          ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               textFormSignIn(
-                'Cadastre-se',
+                'Cadastrar',
+              ),
+              const SizedBox(height: 10.0),
+              textLabelInput(
+                'Email',
               ),
               CustomInputForm(
                 icon: Icons.email_outlined,
                 hint: "Email",
-                label: "Email",
                 keyboardType: TextInputType.emailAddress,
                 obscureText: false,
+              ),
+              textLabelInput(
+                'Senha',
               ),
               CustomInputForm(
                   icon: Icons.lock_outline,
@@ -67,9 +79,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                   ),
                   hint: "Senha",
-                  label: "Senha",
                   keyboardType: TextInputType.text,
                   obscureText: _isObscure),
+              textLabelInput(
+                'Confirmar',
+              ),
               CustomInputForm(
                   icon: Icons.lock_outline,
                   suffixIcon: IconButton(
@@ -86,7 +100,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                   ),
                   hint: "Confirmar Senha",
-                  label: "Confirmar Senha",
                   keyboardType: TextInputType.text,
                   obscureText: _isObscure),
               CustomdButtonFormWidget(

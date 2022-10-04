@@ -11,7 +11,7 @@ void main() {
       theme: appThemeData,
       debugShowCheckedModeBanner: false,
       getPages: AppPages.routes,
-      initialRoute: Routes.INITIAL,
+      initialRoute: Routes.REGISTRATION,
     ),
   );
 }

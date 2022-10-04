@@ -36,6 +36,11 @@ class _LoginPageState extends State<LoginPage> {
       body: SizedBox(
         height: WidgetSizeConfig.screenHeight,
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 60.0,
+          ),
           child: FormLoginWidget(),
         ),
       ),

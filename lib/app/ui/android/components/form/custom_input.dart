@@ -42,7 +42,9 @@ class CustomInputForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20,top: 10),
-      child: TextFormField(
+      child:
+
+      TextFormField(
         // onFieldSubmitted: onChanged,
         // key: this.key,
         // validator: this.validator,
