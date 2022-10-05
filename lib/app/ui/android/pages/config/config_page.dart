@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
 import 'package:provider/provider.dart';
 import "dart:math";
 
@@ -13,7 +14,11 @@ class ConfigPage extends StatefulWidget {
 }
 
 class _ConfigPageState extends State<ConfigPage> {
+  final LoadingWidget loadingWidget = LoadingWidget();
+  bool _isSigningIn = false;
+
   List names = ['Jerry', 'Mark', 'John', 'Maria', 'Paula', 'Livia'];
+
   _confirmSignOut(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     showPlatformDialog(
@@ -32,13 +37,34 @@ class _ConfigPageState extends State<ConfigPage> {
                   child: PlatformText(
                     "Confirmar",
                   ),
-                  onPressed: () {
-                    authProvider.signOut(context);
 
-                    Navigator.pop(context);
-                    // Navigator.of(context).pushNamedAndRemoveUntil(
-                    //     Routes.login, ModalRoute.withName(Routes.login));
+                  onPressed: () async {
+                    setState(() {
+                      _isSigningIn = true;
+                    });
+
+                    await  Future.delayed(const Duration(milliseconds: 5000), ()
+                    {
+                      loadingWidget.openLoadingDialog(context, 'Saindo...');
+
+
+
+                    });
+
+
+
+                    await authProvider.signOutGoogle(context: context);
+                await     Navigator.of(context).pushNamedAndRemoveUntil(
+                        Routes.login, (Route<dynamic> route) => false);
+
+
+                    setState(() {
+                      _isSigningIn = false;
+                    });
+
                   },
+
+
                 )
               ],
             ));

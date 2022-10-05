@@ -7,8 +7,10 @@ import 'package:konsi_app/app/routes/routes.dart';
 
 import 'package:konsi_app/app/ui/android/components/form/custom_button.dart';
 import 'package:konsi_app/app/ui/android/components/form/custom_input.dart';
+import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
 import 'package:konsi_app/app/ui/android/components/style/text_style.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
+import 'package:konsi_app/app/ui/android/pages/auth/widgets_auth_page/form_auth/form_widget/google_button.dart';
 
 class FormAuthnWidget extends StatefulWidget {
   FormAuthnWidget({
@@ -25,6 +27,7 @@ class FormAuthnWidget extends StatefulWidget {
   TextEditingController? emailTextController = TextEditingController();
   TextEditingController? passwordTextController = TextEditingController();
 
+
   @override
   State<FormAuthnWidget> createState() => _FormAuthnWidgetState();
 }
@@ -33,6 +36,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
     with ValidationMixin {
   bool _isObscure = true;
   UserModel? user = UserModel();
+  final LoadingWidget loadingWidget = LoadingWidget();
 
   Widget _buttonGoogle() {
     return ElevatedButton(
@@ -40,8 +44,20 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       ),
-      onPressed: () {
-        // googleLogin();
+      onPressed: () async {
+        await  Future.delayed(const Duration(milliseconds: 5000), ()
+        {
+          loadingWidget.openLoadingDialog(context, 'Carregando...');
+
+
+
+        });
+
+
+
+        await widget.authProvider.signInWithGoogle(context: context);
+     await    Navigator.of(context).pushReplacementNamed(Routes.home);
+
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -222,6 +238,8 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
           height: 5,
         ),
         _buttonGoogle(),
+
+        GoogleSignInButton(),
         const SizedBox(
           height: 10,
         ),

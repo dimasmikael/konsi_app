@@ -16,7 +16,10 @@ class InitialPage extends StatelessWidget {
     WidgetSizeConfig().init(context);
     final authProvider = Provider.of<AuthProvider>(context);
 
-   // print("authProvider.signOut(context)");print(authProvider.signOut(context));
+    // print("authProvider.signOut(context)");
+    // print(authProvider.signOut(context));
+    // print("authProvider.signOutGoogle(context)");
+    // print(authProvider.signInWithGoogle(context: context));
     return Stack(
       children: [
         AnimatedSplashScreen(
@@ -25,9 +28,11 @@ class InitialPage extends StatelessWidget {
             fit: BoxFit.contain,
             width: WidgetSizeConfig.safeBlockHorizontal! * 60,
           ),
-          nextScreen:  authProvider.checkLoggedUser() !=null ? const HomePage():
-
-          const SigninPage(),
+           nextScreen:
+          authProvider.checkLoggedUser() == null ||
+                  authProvider.checkLoggedUserGoogle() == null?
+         const SigninPage()
+            : const HomePage(),
           splashTransition: SplashTransition.scaleTransition,
           pageTransitionType: PageTransitionType.leftToRight,
           backgroundColor: Colors.white,
