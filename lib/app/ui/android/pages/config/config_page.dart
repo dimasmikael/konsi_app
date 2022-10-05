@@ -13,9 +13,9 @@ class ConfigPage extends StatefulWidget {
 }
 
 class _ConfigPageState extends State<ConfigPage> {
-
-  List names = ['Jerry','Mark','John','Maria','Paula','Livia'];
+  List names = ['Jerry', 'Mark', 'John', 'Maria', 'Paula', 'Livia'];
   _confirmSignOut(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     showPlatformDialog(
         context: context,
         builder: (_) => PlatformAlertDialog(
@@ -29,16 +29,15 @@ class _ConfigPageState extends State<ConfigPage> {
                   onPressed: () => Navigator.pop(context),
                 ),
                 PlatformDialogAction(
-                  child: PlatformText("Confirmar",),
+                  child: PlatformText(
+                    "Confirmar",
+                  ),
                   onPressed: () {
-                    final authProvider =
-                        Provider.of<AuthProvider>(context, listen: false);
-
-                    authProvider.signOut();
+                    authProvider.signOut(context);
 
                     Navigator.pop(context);
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.login, ModalRoute.withName(Routes.login));
+                    // Navigator.of(context).pushNamedAndRemoveUntil(
+                    //     Routes.login, ModalRoute.withName(Routes.login));
                   },
                 )
               ],
@@ -53,6 +52,7 @@ class _ConfigPageState extends State<ConfigPage> {
 
   @override
   Widget build(BuildContext context) {
+    // final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SingleChildScrollView(
@@ -70,7 +70,7 @@ class _ConfigPageState extends State<ConfigPage> {
               child: Column(
                 children: <Widget>[
                   Row(
-                    children:  <Widget>[
+                    children: <Widget>[
                       Padding(
                         padding: EdgeInsets.all(12.0),
                         child: CircleAvatar(

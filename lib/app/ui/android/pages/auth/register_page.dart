@@ -19,12 +19,13 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage>
     with ValidationMixin {
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
-  late TextEditingController _confirmPasswordController;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isObscure = true;
+  UserModel? user = UserModel();
   @override
   void initState() {
     super.initState();
@@ -79,6 +80,11 @@ class _RegistrationPageState extends State<RegistrationPage>
   Widget build(BuildContext context) {
     WidgetSizeConfig().init(context);
     final authProvider = Provider.of<AuthProvider>(context);
+
+    setState(() {
+      user?.email = _emailController.text;
+      user?.password = _passwordController.text;
+    });
 
     return Scaffold(
       key: _scaffoldKey,
@@ -151,100 +157,87 @@ class _RegistrationPageState extends State<RegistrationPage>
                 textLabelInput(
                   'Confirmar',
                 ),
-                CustomInputForm(
-                  controller: _confirmPasswordController,
-                  icon: Icons.lock_outline,
-                  suffixIcon: IconButton(
-                    color: Colors.black.withOpacity(.7),
-                    onPressed: () {
-                      setState(
-                        () {
-                          _isObscure = !_isObscure;
-                        },
-                      );
-                    },
-                    icon: Icon(
-                      _isObscure ? Icons.visibility : Icons.visibility_off,
-                    ),
-                  ),
-                  hint: "Confirmar Senha",
-                  keyboardType: TextInputType.text,
-                  obscureText: _isObscure,
-                  validator: (val) => combine(
-                    [
-                      () => confirmPassword(
-                          val,
-                          val != _passwordController.text
-                              ? 'As senhas devem ser iguais'
-                              : '3232'),
+                // CustomInputForm(
+                //   controller: _confirmPasswordController,
+                //   icon: Icons.lock_outline,
+                //   suffixIcon: IconButton(
+                //     color: Colors.black.withOpacity(.7),
+                //     onPressed: () {
+                //       setState(
+                //         () {
+                //           _isObscure = !_isObscure;
+                //         },
+                //       );
+                //     },
+                //     icon: Icon(
+                //       _isObscure ? Icons.visibility : Icons.visibility_off,
+                //     ),
+                //   ),
+                //   hint: "Confirmar Senha",
+                //   keyboardType: TextInputType.text,
+                //   obscureText: _isObscure,
+                //   validator: (val) => combine(
+                //     [
+                //       () => confirmPassword(
+                //           val,
+                //           val != _passwordController.text
+                //               ? 'As senhas devem ser iguais'
+                //               : '3232'),
+                //
+                //     ],
+                //   ),
+                // ),
+                CustomdButtonFormWidget(
+                    buttonText: 'Cadastrar',
+                    width: WidgetSizeConfig.screenWidth! * 10,
+                    onpressed: () async {
+                      //   if (_formKey.currentState!.validate()) {
+                      FocusScope.of(context)
+                          .unfocus(); //to hide the keyboard - if any
+                      await authProvider.registerWithEmailAndPassword(
+                          user, context);
+                      //  UserModel? userModel =
+                      //       await authProvider.registerWithEmailAndPassword(
+                      //           _emailController.text,
+                      //           _passwordController.text,context);
 
-                    ],
-                  ),
-                ),
-                authProvider.status == Status.Registering
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : CustomdButtonFormWidget(
-                        buttonText: 'Cadastrar',
-                        width: WidgetSizeConfig.screenWidth! * 10,
-                        onpressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            FocusScope.of(context)
-                                .unfocus(); //to hide the keyboard - if any
+                      // if (userModel == null) {
+                      //   // _scaffoldKey.currentState!.showSnackBar(SnackBar(
+                      //   //   content:
+                      //   const Text("loginTxtErrorSignIn222");
+                      //   // ));
+                      // } else {
+                      //   if (mounted) {
+                      //     Navigator.of(context)
+                      //         .pushReplacementNamed(Routes.home);
+                      //   }
+                      // }
+                      //  }
+                      //      }
+                    }),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Center(child: _buildSignupBtn()
 
-                            UserModel userModel =
-                                await authProvider.registerWithEmailAndPassword(
-                                    _emailController.text,
-                                    _passwordController.text);
-
-                            if (userModel == null) {
-                              // _scaffoldKey.currentState!.showSnackBar(SnackBar(
-                              //   content:
-                              const Text("loginTxtErrorSignIn222");
-                              // ));
-                            } else {
-                              if (mounted) {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(Routes.home);
-                              }
-                            }
-                            //  }
-                          }
-                        }),
-                authProvider.status == Status.Registering
-                    ? const Center(
-                        child: null,
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Center(child: _buildSignupBtn()
-
-                            // Text(
-                            //
-                            //   ("loginTxtHaveAccount"),
-                            // style: Theme.of(context).textTheme.button,
-                            // )
-                            ),
+                      // Text(
+                      //
+                      //   ("loginTxtHaveAccount"),
+                      // style: Theme.of(context).textTheme.button,
+                      // )
                       ),
-                authProvider.status == Status.Registering
-                    ? const Center(
-                        child: null,
-                      )
-                    : OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.teal,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushReplacementNamed(Routes.login);
-                        },
-                        child: const Text('Entrar'),
-                      )
+                ),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.teal,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed(Routes.login);
+                  },
+                  child: const Text('Entrar'),
+                )
               ],
             ),
           ),

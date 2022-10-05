@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 
 Widget textFormSignIn(String text) {
   return Text(
@@ -37,6 +38,17 @@ Widget textLabelInput(String text) {
         fontWeight: FontWeight.bold,
         fontFamily: 'OpenSans',
       ),
+    ),
+  );
+}
+
+
+Widget textAlert(String texto) {
+  return Text(
+    texto,
+    maxLines: 5,
+    style: TextStyle(
+      fontSize: WidgetSizeConfig.safeBlockHorizontal! * 3.5,
     ),
   );
 }

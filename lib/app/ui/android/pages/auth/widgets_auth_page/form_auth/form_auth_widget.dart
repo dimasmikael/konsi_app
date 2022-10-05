@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:konsi_app/app/data/models/user_model.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/mixins/validations_mixin.dart';
 import 'package:konsi_app/app/routes/routes.dart';
@@ -31,6 +32,7 @@ class FormAuthnWidget extends StatefulWidget {
 class _FormAuthnWidgetState extends State<FormAuthnWidget>
     with ValidationMixin {
   bool _isObscure = true;
+  UserModel? user = UserModel();
 
   Widget _buttonGoogle() {
     return ElevatedButton(
@@ -130,6 +132,12 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
   @override
   Widget build(BuildContext context) {
     WidgetSizeConfig().init(context);
+
+    setState(() {
+      user?.email = widget.emailTextController!.text;
+      user?.password = widget.passwordTextController!.text;
+    });
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -174,48 +182,41 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
             hint: "Senha",
             keyboardType: TextInputType.text,
             obscureText: _isObscure),
-        widget.authProvider.status == Status.Authenticating
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : CustomdButtonFormWidget(
-                buttonText: 'Entrar',
-                width: WidgetSizeConfig.screenWidth! * 10,
-                onpressed: () async {
-                  if (widget.formKey.currentState!.validate()) {
-                    FocusScope.of(context)
-                        .unfocus(); //to hide the keyboard - if any
+        CustomdButtonFormWidget(
+            buttonText: 'Entrar',
+            width: WidgetSizeConfig.screenWidth! * 10,
+            onpressed: () async {
+              //    if (widget.formKey.currentState!.validate()) {
+              FocusScope.of(context).unfocus(); //to hide the keyboard - if any
 
-                    bool status = await widget.authProvider
-                        .signInWithEmailAndPassword(
-                            widget.emailTextController!.text,
-                            widget.passwordTextController!.text);
+              await widget.authProvider
+                  .signInWithEmailAndPassword(user, context);
 
-                    if (!status) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text("textAlert(text)"),
-                          backgroundColor: Colors.red,
-                          action: SnackBarAction(
-                            label: "",
-                            textColor: Colors.white,
-                            onPressed: () {},
-                          ),
-                        ),
-                      );
+              // if (!status!) {
+              //   ScaffoldMessenger.of(context).showSnackBar(
+              //     SnackBar(
+              //       content: const Text("textAlert(text)"),
+              //       backgroundColor: Colors.red,
+              //       action: SnackBarAction(
+              //         label: "",
+              //         textColor: Colors.white,
+              //         onPressed: () {},
+              //       ),
+              //     ),
+              //   );
 
-                      // widget.scaffoldKey.currentState!._scaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      //   content: Text(AppLocalizations.of(context)
-                      //       .translate("loginTxtErrorSignIn")),
-                      // )
-                      //   )//;
-                    } else {
-                      if (mounted) {
-                        Navigator.of(context).pushReplacementNamed(Routes.home);
-                      }
-                    }
-                  }
-                }),
+              // widget.scaffoldKey.currentState!._scaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //   content: Text(AppLocalizations.of(context)
+              //       .translate("loginTxtErrorSignIn")),
+              // )
+              //   )//;
+              // } else {
+              //   if (mounted) {
+              //     Navigator.of(context).pushReplacementNamed(Routes.home);
+              //   }
+              // }
+              //   }
+            }),
         _buildSignInWithText(),
         const SizedBox(
           height: 5,
@@ -224,27 +225,19 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
         const SizedBox(
           height: 10,
         ),
-        widget.authProvider.status == Status.Authenticating
-            ? const Center(
-                child: null,
-              )
-            : _buildSignupBtn(),
-        widget.authProvider.status == Status.Authenticating
-            ? const Center(
-                child: null,
-              )
-            : OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.teal,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(Routes.register);
-                },
-                child: const Text('Cadastrar'),
-              )
+        _buildSignupBtn(),
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.teal,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+          ),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(Routes.register);
+          },
+          child: const Text('Cadastrar'),
+        )
       ],
     );
   }

@@ -37,6 +37,7 @@ class _SigninPageState extends State<SigninPage> {
     WidgetSizeConfig().init(context);
     final authProvider = Provider.of<AuthProvider>(context);
 
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -57,9 +58,9 @@ class _SigninPageState extends State<SigninPage> {
           child: Form(
             key: _formKey,
             child: FormAuthnWidget(
-                scaffoldKey:_scaffoldKey,
-                formKey:_formKey,
-                authProvider:authProvider,
+                scaffoldKey: _scaffoldKey,
+                formKey: _formKey,
+                authProvider: authProvider,
                 emailTextController: _emailController,
                 passwordTextController: _passwordController),
           ),

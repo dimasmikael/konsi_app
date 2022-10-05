@@ -1,92 +1,111 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:konsi_app/app/data/models/user_model.dart';
-
-enum Status {
-  Uninitialized,
-  Authenticated,
-  Authenticating,
-  Unauthenticated,
-  Registering
-}
+import 'package:konsi_app/app/routes/routes.dart';
+import 'package:konsi_app/app/ui/android/components/alerts/alert.dart';
 
 class AuthProvider extends ChangeNotifier {
-  late FirebaseAuth _auth;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  Alert _alert = Alert();
+  User? loggedUser;
 
-  Status _status = Status.Uninitialized;
-
-  Status get status => _status;
-
-  AuthProvider() {
-    //initialise object
-    _auth = FirebaseAuth.instance;
-
-    //listener for authentication changes such as user sign in and sign out
-    _auth.authStateChanges().listen(onAuthStateChanged);
+  checkLoggedUser() {
+    loggedUser = _auth.currentUser;
+    return loggedUser;
   }
 
-  UserModel _userFromFirebase(User? user) {
-    if (user == null) {
-      return UserModel(uid: 'null');
-    }
-
-    return UserModel(
-      uid: user.uid,
-      email: user.email,
-    );
-  }
-
-  Future<void> onAuthStateChanged(User? firebaseUser) async {
-    if (firebaseUser == null) {
-      _status = Status.Unauthenticated;
-    } else {
-      _userFromFirebase(firebaseUser);
-      _status = Status.Authenticated;
-    }
-    notifyListeners();
-  }
-
-
-  Future<UserModel> registerWithEmailAndPassword(
-      String email, String password) async {
+  Future registerWithEmailAndPassword(
+      UserModel? user, BuildContext? context) async {
     try {
-      _status = Status.Registering;
       notifyListeners();
-      final UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-
-      return _userFromFirebase(result.user);
+      _auth
+          .createUserWithEmailAndPassword(
+              email: user!.email, password: user.password)
+          .then(
+        (firebaseUser) {
+          Navigator.pushReplacementNamed(context!, Routes.home);
+        },
+      );
+      _alert.success(context!, 'Login cadastrado com sucesso');
+    } on FirebaseAuthException catch (error) {
+      print(error);
+      notifyListeners();
+      _alert.error(
+        context!,
+        error.toString(),
+      );
     } catch (e) {
-      print("Error on the new user registration = " + e.toString());
-      _status = Status.Unauthenticated;
       notifyListeners();
-      return UserModel( uid: 'null');
+      print(e);
+      _alert.error(
+        context!,
+        e.toString(),
+      );
     }
+    return null;
   }
 
-
-  Future<bool> signInWithEmailAndPassword(String email, String password) async {
+  Future signInWithEmailAndPassword(
+      UserModel? user, BuildContext context) async {
     try {
-      _status = Status.Authenticating;
+      await _auth
+          .signInWithEmailAndPassword(
+              email: user!.email, password: user!.password)
+          .then(
+        (firebaseUser) {
+          Navigator.of(context).pushReplacementNamed(Routes.home);
+        },
+      );
       notifyListeners();
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return true;
+
+      _alert.success(context!, 'Sucesso!');
+    } on FirebaseAuthException catch (error) {
+      notifyListeners();
+      print(error);
+      _alert.error(
+        context!,
+        error.toString(),
+      );
     } catch (e) {
-      print("Error on the sign in = " + e.toString());
-      _status = Status.Unauthenticated;
       notifyListeners();
-      return false;
+      print(e);
+      _alert.error(
+        context!,
+        e.toString(),
+      );
     }
+    return null;
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
   }
 
-  Future signOut() async {
-    _auth.signOut();
-    _status = Status.Unauthenticated;
-    notifyListeners();
-    return Future.delayed(Duration.zero);
+  Future signOut(BuildContext context, [bool mounted = true]) async {
+    try {
+      await _auth.signOut().then(
+        (firebaseUser) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.login, (Route<dynamic> route) => false);
+        },
+      );
+      notifyListeners();
+      if (!mounted) return;
+      _alert.success(context, 'Deslogado com sucesso');
+    } on FirebaseAuthException catch (error) {
+      notifyListeners();
+      print(error);
+      _alert.error(
+        context,
+        error.toString(),
+      );
+    } catch (e) {
+      notifyListeners();
+      print(e);
+      _alert.error(
+        context,
+        e.toString(),
+      );
+    }
   }
 }
