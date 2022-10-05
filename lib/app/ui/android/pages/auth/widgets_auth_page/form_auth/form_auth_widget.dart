@@ -1,6 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:konsi_app/app/data/providers/auth_provider.dart';
+import 'package:konsi_app/app/mixins/validations_mixin.dart';
+import 'package:konsi_app/app/routes/routes.dart';
 
 import 'package:konsi_app/app/ui/android/components/form/custom_button.dart';
 import 'package:konsi_app/app/ui/android/components/form/custom_input.dart';
@@ -12,7 +14,13 @@ class FormAuthnWidget extends StatefulWidget {
     Key? key,
     required this.emailTextController,
     required this.passwordTextController,
+    required this.authProvider,
+    required this.formKey,
+    required this.scaffoldKey,
   }) : super(key: key);
+  final AuthProvider authProvider;
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  final GlobalKey<FormState> formKey;
   TextEditingController? emailTextController = TextEditingController();
   TextEditingController? passwordTextController = TextEditingController();
 
@@ -20,14 +28,15 @@ class FormAuthnWidget extends StatefulWidget {
   State<FormAuthnWidget> createState() => _FormAuthnWidgetState();
 }
 
-class _FormAuthnWidgetState extends State<FormAuthnWidget> {
+class _FormAuthnWidgetState extends State<FormAuthnWidget>
+    with ValidationMixin {
   bool _isObscure = true;
 
   Widget _buttonGoogle() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Colors.white,
-        onPrimary: Colors.black,
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white,
       ),
       onPressed: () {
         // googleLogin();
@@ -98,6 +107,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget> {
                 fontWeight: FontWeight.w400,
               ),
             ),
+
             TextSpan(
               text: 'Clique aqui',
               style: TextStyle(
@@ -106,6 +116,11 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
+            // onPressed: () {
+            //   Navigator.of(context)
+            //       .pushReplacementNamed(Routes.register);
+            // },
           ],
         ),
       ),
@@ -126,16 +141,26 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget> {
           'Email',
         ),
         CustomInputForm(
-          controller: widget.emailTextController,
-          icon: Icons.email_outlined,
-          hint: "Email",
-          keyboardType: TextInputType.emailAddress,
-          obscureText: false,
-        ),
+            controller: widget.emailTextController,
+            icon: Icons.email_outlined,
+            hint: "Email",
+            keyboardType: TextInputType.emailAddress,
+            obscureText: false,
+            validator: (val) =>
+                combine([
+                  () => isNotEmpty(val, 'Informe um email'),
+
+                      () => checkEmail(val),
+
+
+
+                ])),
         textLabelInput(
           'Senha',
         ),
         CustomInputForm(
+            validator: (val) =>
+                combine([() => isNotEmpty(val, 'Informe uma senha')]),
             controller: widget.passwordTextController,
             icon: Icons.lock_outline,
             suffixIcon: IconButton(
@@ -154,11 +179,48 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget> {
             hint: "Senha",
             keyboardType: TextInputType.text,
             obscureText: _isObscure),
-        CustomdButtonFormWidget(
-          buttonText: 'Entrar',
-          width: WidgetSizeConfig.screenWidth! * 10,
-          onpressed: () {},
-        ),
+        widget.authProvider.status == Status.Authenticating
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : CustomdButtonFormWidget(
+                buttonText: 'Entrar',
+                width: WidgetSizeConfig.screenWidth! * 10,
+                onpressed: () async {
+                  if (widget.formKey.currentState!.validate()) {
+                    FocusScope.of(context)
+                        .unfocus(); //to hide the keyboard - if any
+
+                    bool status = await widget.authProvider
+                        .signInWithEmailAndPassword(
+                            widget.emailTextController!.text,
+                            widget.passwordTextController!.text);
+
+                    if (!status) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("textAlert(text)"),
+                          backgroundColor: Colors.red,
+                          action: SnackBarAction(
+                            label: "",
+                            textColor: Colors.white,
+                            onPressed: () {},
+                          ),
+                        ),
+                      );
+
+                      // widget.scaffoldKey.currentState!._scaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //   content: Text(AppLocalizations.of(context)
+                      //       .translate("loginTxtErrorSignIn")),
+                      // )
+                      //   )//;
+                    } else {
+                      if (mounted) {
+                        Navigator.of(context).pushReplacementNamed(Routes.home);
+                      }
+                    }
+                  }
+                }),
         _buildSignInWithText(),
         const SizedBox(
           height: 5,
@@ -167,7 +229,22 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget> {
         const SizedBox(
           height: 10,
         ),
-        _buildSignupBtn()
+        widget.authProvider.status == Status.Authenticating
+            ? Center(
+                child: null,
+              )
+            : _buildSignupBtn(),
+        widget.authProvider.status == Status.Authenticating
+            ? Center(
+                child: null,
+              )
+            : TextButton(
+                child: Text("loginBtnLinkCreateAccount"),
+                //    textColor: Theme.of(context).iconTheme.color,
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed(Routes.register);
+                },
+              ),
       ],
     );
   }

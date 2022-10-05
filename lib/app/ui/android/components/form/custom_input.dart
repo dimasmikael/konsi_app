@@ -13,7 +13,8 @@ class CustomInputForm extends StatelessWidget {
   final int? maxLines;
   final int? minLines;
   final List<TextInputFormatter>? inputFormatters;
-  final FormFieldValidator<String>? validator;
+//  final String? Function(String?)? validator;
+final   String Function(dynamic val)? validator;
   final TextStyle? labelStyle;
   final Key? key;
   final Widget? suffixIcon;
@@ -31,12 +32,12 @@ class CustomInputForm extends StatelessWidget {
       this.maxLines,
       this.minLines,
       this.inputFormatters,
-      this.validator,
+
       this.labelStyle,
       this.key,
       this.onChanged,
       this.onFieldSubmitted,
-      this.icon,required this.obscureText,this.suffixIcon});
+      this.icon,required this.obscureText,this.suffixIcon,this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class CustomInputForm extends StatelessWidget {
       TextFormField(
         // onFieldSubmitted: onChanged,
         // key: this.key,
-        // validator: this.validator,
+      validator: validator,
         // inputFormatters: this.inputFormatters,
         // maxLines: this.maxLines,
         // minLines: this.minLines,
