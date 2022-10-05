@@ -27,7 +27,6 @@ class FormAuthnWidget extends StatefulWidget {
   TextEditingController? emailTextController = TextEditingController();
   TextEditingController? passwordTextController = TextEditingController();
 
-
   @override
   State<FormAuthnWidget> createState() => _FormAuthnWidgetState();
 }
@@ -36,56 +35,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
     with ValidationMixin {
   bool _isObscure = true;
   UserModel? user = UserModel();
-  final LoadingWidget loadingWidget = LoadingWidget();
-
-  Widget _buttonGoogle() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
-      ),
-      onPressed: () async {
-        await  Future.delayed(const Duration(milliseconds: 5000), ()
-        {
-          loadingWidget.openLoadingDialog(context, 'Carregando...');
-
-
-
-        });
-
-
-
-        await widget.authProvider.signInWithGoogle(context: context);
-     await    Navigator.of(context).pushReplacementNamed(Routes.home);
-
-      },
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Image(
-              image: AssetImage("assets/images/google-logo.png"),
-              height: 18.0,
-              width: 24,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 24, right: 8),
-              child: Text(
-                'Entre com o  Google',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+ // final LoadingWidget loadingWidget = LoadingWidget();
 
   Widget _buildSignInWithText() {
     return Column(
@@ -155,7 +105,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
     });
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         textFormSignIn(
           'Entrar',
@@ -237,25 +187,36 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
         const SizedBox(
           height: 5,
         ),
-        _buttonGoogle(),
-
         GoogleSignInButton(),
-        const SizedBox(
-          height: 10,
-        ),
-        _buildSignupBtn(),
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.teal,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-          ),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed(Routes.register);
-          },
-          child: const Text('Cadastrar'),
-        )
+        Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              _buildSignupBtn(),
+              const SizedBox(height: 10.0),
+              SizedBox(
+                width: 150,
+                height: 50,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.teal,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed(Routes.register);
+                  },
+                  child: const Text(
+                    'Cadastrar',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              )
+            ]),
       ],
     );
   }

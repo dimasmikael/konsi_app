@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(
-    Container(color: Colors.black),
+    Container(color: Colors.greenAccent),
   );
 
   await Firebase.initializeApp();
@@ -19,38 +19,17 @@ void main() async {
       runApp(
         MultiProvider(
           providers: [
-
-
             ChangeNotifierProvider<AuthProvider>(
               create: (context) => AuthProvider(),
             ),
-
           ],
-          child:
-
-
-        MaterialApp(
-          theme: appThemeData,
-          debugShowCheckedModeBanner: false,
-          routes: Routes.routes,
-          initialRoute: '/splash',
-          //
-          // home:
-          // Consumer<AuthProvider>(
-          //    builder: (_, authProviderRef, __) {
-          //      if (userSnapshot.connectionState ==
-          //          ConnectionState.active) {
-          //        return userSnapshot.hasData
-          //            ? HomeScreen()
-          //            : SignInScreen();
-          //      }
-          //
-          //      return Material(
-          //        child: CircularProgressIndicator(),
-          //      );
-          //    },
-          //   ),
-        ),    ),
+          child: MaterialApp(
+            theme: appThemeData,
+            debugShowCheckedModeBanner: false,
+            routes: Routes.routes,
+            initialRoute: '/splash',
+          ),
+        ),
       );
     },
   );

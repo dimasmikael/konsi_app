@@ -14,8 +14,10 @@ class ConfigPage extends StatefulWidget {
 }
 
 class _ConfigPageState extends State<ConfigPage> {
-  final LoadingWidget loadingWidget = LoadingWidget();
+  //final LoadingWidget loadingWidget = LoadingWidget();
   bool _isSigningIn = false;
+  @override
+  bool mounted = false;
 
   List names = ['Jerry', 'Mark', 'John', 'Maria', 'Paula', 'Livia'];
 
@@ -37,44 +39,38 @@ class _ConfigPageState extends State<ConfigPage> {
                   child: PlatformText(
                     "Confirmar",
                   ),
-
                   onPressed: () async {
                     setState(() {
                       _isSigningIn = true;
                     });
 
-                    await  Future.delayed(const Duration(milliseconds: 5000), ()
-                    {
-                      loadingWidget.openLoadingDialog(context, 'Saindo...');
+                    // await Future.delayed(const Duration(milliseconds: 5000),
+                    //     () {
+                    //   loadingWidget.openLoadingDialog(context, 'Saindo...');
+                    // });
 
 
 
-                    });
+                    // if(authProvider.checkLoggedUser() == null){
+                    //   await authProvider.signOutGoogle(context: context);
+                    // }else{
+                    //   if (!mounted) {}
+                    await authProvider.signOut(context);
+                    // }
 
-
-
-                    await authProvider.signOutGoogle(context: context);
-                await     Navigator.of(context).pushNamedAndRemoveUntil(
+                    if (!mounted) {}
+                    await Navigator.of(context).pushNamedAndRemoveUntil(
                         Routes.login, (Route<dynamic> route) => false);
-
 
                     setState(() {
                       _isSigningIn = false;
                     });
-
                   },
-
-
                 )
               ],
             ));
   }
 
-  final TextStyle headerStyle = TextStyle(
-    color: Colors.grey.shade800,
-    fontWeight: FontWeight.bold,
-    fontSize: 20.0,
-  );
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:konsi_app/app/ui/android/pages/auth/widgets_auth_page/form_auth/form_auth_widget.dart';
@@ -17,13 +19,25 @@ class _SigninPageState extends State<SigninPage> {
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  User? loggedUser;
+
+  GoogleSignInAccount? loggedUserGoogle;
   @override
   void initState() {
     super.initState();
 
     _emailController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
+
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    loggedUser = auth.currentUser;
+    loggedUserGoogle = googleSignIn.currentUser;
   }
+
+
 
   @override
   void dispose() {
@@ -36,7 +50,7 @@ class _SigninPageState extends State<SigninPage> {
   Widget build(BuildContext context) {
     WidgetSizeConfig().init(context);
     final authProvider = Provider.of<AuthProvider>(context);
-
+print("loggedUser");print(loggedUser?.email);print("loggedUserGoogle)");print(loggedUserGoogle);
 
     return Scaffold(
       key: _scaffoldKey,

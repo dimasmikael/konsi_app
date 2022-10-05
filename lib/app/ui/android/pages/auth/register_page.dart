@@ -196,36 +196,18 @@ class _RegistrationPageState extends State<RegistrationPage>
                           .unfocus(); //to hide the keyboard - if any
                       await authProvider.registerWithEmailAndPassword(
                           user, context);
-                      //  UserModel? userModel =
-                      //       await authProvider.registerWithEmailAndPassword(
-                      //           _emailController.text,
-                      //           _passwordController.text,context);
-
-                      // if (userModel == null) {
-                      //   // _scaffoldKey.currentState!.showSnackBar(SnackBar(
-                      //   //   content:
-                      //   const Text("loginTxtErrorSignIn222");
-                      //   // ));
-                      // } else {
-                      //   if (mounted) {
-                      //     Navigator.of(context)
-                      //         .pushReplacementNamed(Routes.home);
-                      //   }
-                      // }
-                      //  }
-                      //      }
                     }),
                 Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: Center(child: _buildSignupBtn()
 
-                      // Text(
-                      //
-                      //   ("loginTxtHaveAccount"),
-                      // style: Theme.of(context).textTheme.button,
-                      // )
+
                       ),
                 ),
+
+            SizedBox(width: 150,
+              height: 50,
+              child:
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white,
@@ -236,8 +218,8 @@ class _RegistrationPageState extends State<RegistrationPage>
                   onPressed: () {
                     Navigator.of(context).pushReplacementNamed(Routes.login);
                   },
-                  child: const Text('Entrar'),
-                )
+                  child: const Text('Entrar',style: TextStyle(fontSize: 20),),
+                ),   )
               ],
             ),
           ),

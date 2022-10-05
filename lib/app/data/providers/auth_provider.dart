@@ -11,15 +11,15 @@ class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final Alert _alert = Alert();
-  final LoadingWidget loadingWidget = LoadingWidget();
+  //final LoadingWidget loadingWidget = LoadingWidget();
   User? loggedUser;
   GoogleSignInAccount? loggedUserGoogle;
   bool mounted = false;
 
-  checkLoggedUser() {
-    loggedUser = _auth.currentUser;
-    return loggedUser;
-  }
+  // checkLoggedUser() {
+  //   loggedUser = _auth.currentUser;
+  //   return loggedUser;
+  // }
 
   Future registerWithEmailAndPassword(
       UserModel? user, BuildContext? context) async {
@@ -84,33 +84,33 @@ class AuthProvider extends ChangeNotifier {
     return null;
   }
 
-  // Future signOut(BuildContext context, [bool mounted = true]) async {
-  //   try {
-  //     await _auth.signOut().then(
-  //       (firebaseUser) {
-  //         Navigator.of(context).pushNamedAndRemoveUntil(
-  //             Routes.login, (Route<dynamic> route) => false);
-  //       },
-  //     );
-  //     notifyListeners();
-  //     if (!mounted) return;
-  //     _alert.success(context, 'Deslogado com sucesso');
-  //   } on FirebaseAuthException catch (error) {
-  //     notifyListeners();
-  //     print(error);
-  //     _alert.error(
-  //       context,
-  //       error.toString(),
-  //     );
-  //   } catch (e) {
-  //     notifyListeners();
-  //     print(e);
-  //     _alert.error(
-  //       context,
-  //       e.toString(),
-  //     );
-  //   }
-  // }
+  Future signOut(BuildContext context, [bool mounted = true]) async {
+    try {
+      await _auth.signOut().then(
+        (firebaseUser) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.login, (Route<dynamic> route) => false);
+        },
+      );
+      notifyListeners();
+      if (!mounted) return;
+      _alert.success(context, 'Deslogado com sucesso');
+    } on FirebaseAuthException catch (error) {
+      notifyListeners();
+      print(error);
+      _alert.error(
+        context,
+        error.toString(),
+      );
+    } catch (e) {
+      notifyListeners();
+      print(e);
+      _alert.error(
+        context,
+        e.toString(),
+      );
+    }
+  }
 
   Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -202,9 +202,9 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  checkLoggedUserGoogle() {
-    loggedUserGoogle = googleSignIn.currentUser;
-
-    return loggedUserGoogle;
-  }
+  // checkLoggedUserGoogle() {
+  //   loggedUserGoogle = googleSignIn.currentUser;
+  //
+  //   return loggedUserGoogle;
+  // }
 }

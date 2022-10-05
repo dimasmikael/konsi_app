@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
+import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:provider/provider.dart';
 
 class GoogleSignInButton extends StatefulWidget {
@@ -11,19 +12,18 @@ class GoogleSignInButton extends StatefulWidget {
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
-  bool _isSigningIn = false;
-  final LoadingWidget loadingWidget = LoadingWidget();
+  bool isLoading = false;
+
+  // final LoadingWidget loadingWidget = LoadingWidget();
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: _isSigningIn
-          ? const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            )
-          : OutlinedButton(
+    WidgetSizeConfig().init(context);
+    return !isLoading
+        ? SizedBox(
+            width: WidgetSizeConfig.screenWidth! * 0.8,
+            child: OutlinedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),
                 shape: MaterialStateProperty.all(
@@ -32,56 +32,51 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   ),
                 ),
               ),
+              onPressed: () async {
+                setState(() {
+                  isLoading = true;
+                });
 
-        onPressed: () async {
-          setState(() {
-            _isSigningIn = true;
-          });
-
-          await  Future.delayed(const Duration(milliseconds: 5000), ()
-          {
-            loadingWidget.openLoadingDialog(context, 'Carregando...');
-
-
-
-          });
-
-
-
-          await authProvider.signInWithGoogle(context: context);
-          await    Navigator.of(context).pushReplacementNamed(Routes.home);
-
-          setState(() {
-            _isSigningIn = false;
-          });
-
-        },
-
+            //    try {
+                  await authProvider.signInWithGoogle(context: context);
+              await     Navigator.pushNamedAndRemoveUntil(
+                      context, Routes.home, (route) => false);
+                // } catch (e) {
+                //   if (e is FirebaseAuthException) {
+                //     print(e.message!);
+                //   }
+                // }
+                setState(() {
+                  isLoading = false;
+                });
+              },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    Image(
-                      image: AssetImage("assets/images/google-logo.png"),
-                      height: 35.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Entre com o  Google',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w600,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[
+                      Image(
+                        image: AssetImage("assets/images/google-logo.png"),
+                        height: 35.0,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Entre com o  Google',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ]),
               ),
             ),
-    );
+          )
+        : const CircularProgressIndicator();
+
+
   }
 }
