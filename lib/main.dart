@@ -33,7 +33,7 @@ void main() async {
           theme: appThemeData,
           debugShowCheckedModeBanner: false,
           routes: Routes.routes,
-          initialRoute: '/splash',
+          initialRoute: '/home',
           //
           // home:
           // Consumer<AuthProvider>(

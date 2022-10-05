@@ -109,7 +109,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
             ),
 
             TextSpan(
-              text: 'Clique aqui',
+              text: 'Cadastre-se aqui',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18.0,
@@ -146,14 +146,9 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
             hint: "Email",
             keyboardType: TextInputType.emailAddress,
             obscureText: false,
-            validator: (val) =>
-                combine([
+            validator: (val) => combine([
                   () => isNotEmpty(val, 'Informe um email'),
-
-                      () => checkEmail(val),
-
-
-
+                  () => checkEmail(val),
                 ])),
         textLabelInput(
           'Senha',
@@ -180,7 +175,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
             keyboardType: TextInputType.text,
             obscureText: _isObscure),
         widget.authProvider.status == Status.Authenticating
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : CustomdButtonFormWidget(
@@ -199,7 +194,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
                     if (!status) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("textAlert(text)"),
+                          content: const Text("textAlert(text)"),
                           backgroundColor: Colors.red,
                           action: SnackBarAction(
                             label: "",
@@ -230,21 +225,26 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
           height: 10,
         ),
         widget.authProvider.status == Status.Authenticating
-            ? Center(
+            ? const Center(
                 child: null,
               )
             : _buildSignupBtn(),
         widget.authProvider.status == Status.Authenticating
-            ? Center(
+            ? const Center(
                 child: null,
               )
-            : TextButton(
-                child: Text("loginBtnLinkCreateAccount"),
-                //    textColor: Theme.of(context).iconTheme.color,
+            : OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.teal,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                ),
                 onPressed: () {
                   Navigator.of(context).pushReplacementNamed(Routes.register);
                 },
-              ),
+                child: const Text('Cadastrar'),
+              )
       ],
     );
   }

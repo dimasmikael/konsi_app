@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:konsi_app/app/data/models/user_model.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
+import 'package:konsi_app/app/mixins/validations_mixin.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/android/components/form/custom_button.dart';
 import 'package:konsi_app/app/ui/android/components/form/custom_input.dart';
@@ -16,9 +17,11 @@ class RegistrationPage extends StatefulWidget {
   State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationPageState extends State<RegistrationPage>
+    with ValidationMixin {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isObscure = true;
@@ -27,14 +30,51 @@ class _RegistrationPageState extends State<RegistrationPage> {
     super.initState();
     _emailController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
+    _confirmPasswordController = TextEditingController(text: "");
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
+
+  Widget _buildSignupBtn() {
+    return GestureDetector(
+      onTap: () => print('Sign Up Button Pressed'),
+      child: RichText(
+        text: const TextSpan(
+          children: [
+            TextSpan(
+              text: 'Já tem conta? ',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+
+            TextSpan(
+              text: 'Entre aqui',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            // onPressed: () {
+            //   Navigator.of(context)
+            //       .pushReplacementNamed(Routes.register);
+            // },
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetSizeConfig().init(context);
@@ -51,36 +91,38 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
       body: SizedBox(
         height: WidgetSizeConfig.screenHeight,
-        child:
-        Form(
-        key: _formKey,child:
-        SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 10.0,
-            vertical: 60.0,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              textFormSignIn(
-                'Cadastrar',
-              ),
-              const SizedBox(height: 10.0),
-              textLabelInput(
-                'Email',
-              ),
-              CustomInputForm(
-                controller: _emailController,
-                icon: Icons.email_outlined,
-                hint: "Email",
-                keyboardType: TextInputType.emailAddress,
-                obscureText: false,
-              ),
-              textLabelInput(
-                'Senha',
-              ),
-              CustomInputForm(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10.0,
+              vertical: 60.0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                textFormSignIn(
+                  'Cadastrar',
+                ),
+                const SizedBox(height: 10.0),
+                textLabelInput(
+                  'Email',
+                ),
+                CustomInputForm(
+                    controller: _emailController,
+                    icon: Icons.email_outlined,
+                    hint: "Email",
+                    keyboardType: TextInputType.emailAddress,
+                    obscureText: false,
+                    validator: (val) => combine([
+                          () => isNotEmpty(val, 'Informe um email'),
+                          () => checkEmail(val),
+                        ])),
+                textLabelInput(
+                  'Senha',
+                ),
+                CustomInputForm(
                   controller: _passwordController,
                   icon: Icons.lock_outline,
                   suffixIcon: IconButton(
@@ -98,12 +140,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                   hint: "Senha",
                   keyboardType: TextInputType.text,
-                  obscureText: _isObscure),
-              textLabelInput(
-                'Confirmar',
-              ),
-              CustomInputForm(
-                  controller: _passwordController,
+                  obscureText: _isObscure,
+                  validator: (val) => combine(
+                    [
+                      () => isNotEmpty(val, 'Informe uma senha'),
+                      () => hasSevenChars(val)
+                    ],
+                  ),
+                ),
+                textLabelInput(
+                  'Confirmar',
+                ),
+                CustomInputForm(
+                  controller: _confirmPasswordController,
                   icon: Icons.lock_outline,
                   suffixIcon: IconButton(
                     color: Colors.black.withOpacity(.7),
@@ -120,67 +169,87 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                   hint: "Confirmar Senha",
                   keyboardType: TextInputType.text,
-                  obscureText: _isObscure),
+                  obscureText: _isObscure,
+                  validator: (val) => combine(
+                    [
+                      () => confirmPassword(
+                          val,
+                          val != _passwordController.text
+                              ? 'As senhas devem ser iguais'
+                              : '3232'),
 
-              authProvider.status == Status.Registering
-                  ? Center(
-                child: CircularProgressIndicator(),
-              )
-                  :
-              CustomdButtonFormWidget(
-                buttonText: 'Cadastrar',
-                width: WidgetSizeConfig.screenWidth! * 10,
-                onpressed: () async {
-                  // if (_formKey.currentState!.validate()) {
-                  //   FocusScope.of(context)
-                  //       .unfocus(); //to hide the keyboard - if any
+                    ],
+                  ),
+                ),
+                authProvider.status == Status.Registering
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : CustomdButtonFormWidget(
+                        buttonText: 'Cadastrar',
+                        width: WidgetSizeConfig.screenWidth! * 10,
+                        onpressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            FocusScope.of(context)
+                                .unfocus(); //to hide the keyboard - if any
 
-                    UserModel userModel =
-                    await authProvider.registerWithEmailAndPassword(
-                        _emailController.text,
-                        _passwordController.text);
+                            UserModel userModel =
+                                await authProvider.registerWithEmailAndPassword(
+                                    _emailController.text,
+                                    _passwordController.text);
 
-                    if (userModel == null) {
-                      // _scaffoldKey.currentState!.showSnackBar(SnackBar(
-                      //   content:
-                        Text(
-                            "loginTxtErrorSignIn");
-                      // ));
-                    }
-                //  }
-                }
-              ),
+                            if (userModel == null) {
+                              // _scaffoldKey.currentState!.showSnackBar(SnackBar(
+                              //   content:
+                              const Text("loginTxtErrorSignIn222");
+                              // ));
+                            } else {
+                              if (mounted) {
+                                Navigator.of(context)
+                                    .pushReplacementNamed(Routes.home);
+                              }
+                            }
+                            //  }
+                          }
+                        }),
+                authProvider.status == Status.Registering
+                    ? const Center(
+                        child: null,
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: Center(child: _buildSignupBtn()
 
-    authProvider.status == Status.Registering
-    ? Center(
-    child: null,
-    )
-        : Padding(
-    padding: const EdgeInsets.only(top: 48),
-    child: Center(
-    child: Text(
-
-      ("loginTxtHaveAccount"),
-    style: Theme.of(context).textTheme.button,
-    )),
-    ),
-
-    authProvider.status == Status.Registering
-    ? const Center(
-    child: null,
-    )
-        : TextButton(
-    child: const Text(("loginBtnLinkSignIn"),),
-    //  textColor: Theme.of(context).iconTheme.color,
-    onPressed: () {
-    Navigator.of(context)
-        .pushReplacementNamed(Routes.login);
-    },
-    ),
-            ],
+                            // Text(
+                            //
+                            //   ("loginTxtHaveAccount"),
+                            // style: Theme.of(context).textTheme.button,
+                            // )
+                            ),
+                      ),
+                authProvider.status == Status.Registering
+                    ? const Center(
+                        child: null,
+                      )
+                    : OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.teal,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(Routes.login);
+                        },
+                        child: const Text('Entrar'),
+                      )
+              ],
+            ),
           ),
         ),
       ),
-      ),   );
+    );
   }
 }
