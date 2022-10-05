@@ -7,14 +7,20 @@ import 'package:konsi_app/app/ui/android/components/form/custom_input.dart';
 import 'package:konsi_app/app/ui/android/components/style/text_style.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 
-class FormLoginWidget extends StatefulWidget {
-  FormLoginWidget({Key? key}) : super(key: key);
+class FormAuthnWidget extends StatefulWidget {
+  FormAuthnWidget({
+    Key? key,
+    required this.emailTextController,
+    required this.passwordTextController,
+  }) : super(key: key);
+  TextEditingController? emailTextController = TextEditingController();
+  TextEditingController? passwordTextController = TextEditingController();
 
   @override
-  State<FormLoginWidget> createState() => _FormLoginWidgetState();
+  State<FormAuthnWidget> createState() => _FormAuthnWidgetState();
 }
 
-class _FormLoginWidgetState extends State<FormLoginWidget> {
+class _FormAuthnWidgetState extends State<FormAuthnWidget> {
   bool _isObscure = true;
 
   Widget _buttonGoogle() {
@@ -120,6 +126,7 @@ class _FormLoginWidgetState extends State<FormLoginWidget> {
           'Email',
         ),
         CustomInputForm(
+          controller: widget.emailTextController,
           icon: Icons.email_outlined,
           hint: "Email",
           keyboardType: TextInputType.emailAddress,
@@ -129,6 +136,7 @@ class _FormLoginWidgetState extends State<FormLoginWidget> {
           'Senha',
         ),
         CustomInputForm(
+            controller: widget.passwordTextController,
             icon: Icons.lock_outline,
             suffixIcon: IconButton(
               color: Colors.black.withOpacity(.7),

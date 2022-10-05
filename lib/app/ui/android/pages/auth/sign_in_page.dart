@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
-import 'package:konsi_app/app/ui/android/pages/login/widgets_login_page/formlogin/form_login_widget.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+
+class SigninPage extends StatefulWidget {
+  const SigninPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SigninPage> createState() => _SigninPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SigninPageState extends State<SigninPage> {
+
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -35,13 +37,13 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: SizedBox(
         height: WidgetSizeConfig.screenHeight,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(
+        child: const SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(
             horizontal: 10.0,
             vertical: 60.0,
           ),
-          child: FormLoginWidget(),
+       //   child: FormLoginWidget(emailTextController:_loginController.emailTextController,passwordTextController:_loginController.passwordTextController),
         ),
       ),
     );

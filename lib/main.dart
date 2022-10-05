@@ -1,17 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:konsi_app/app/routes/app_pages.dart';
-import 'package:konsi_app/app/routes/app_routes.dart';
+import 'package:flutter/services.dart';
+import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/theme/app_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
   runApp(
-    GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: appThemeData,
-      debugShowCheckedModeBanner: false,
-      getPages: AppPages.routes,
-      initialRoute: Routes.REGISTRATION,
-    ),
+    Container(color: Colors.black),
+  );
+
+  await Firebase.initializeApp();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+    (_) async {
+      runApp(
+        MaterialApp(
+          theme: appThemeData,
+          debugShowCheckedModeBanner: false,
+          routes: Routes.routes,
+          initialRoute: '/splash',
+          //
+          // home:
+          // Consumer<AuthProvider>(
+          //    builder: (_, authProviderRef, __) {
+          //      if (userSnapshot.connectionState ==
+          //          ConnectionState.active) {
+          //        return userSnapshot.hasData
+          //            ? HomeScreen()
+          //            : SignInScreen();
+          //      }
+          //
+          //      return Material(
+          //        child: CircularProgressIndicator(),
+          //      );
+          //    },
+          //   ),
+        ),
+      );
+    },
   );
 }
