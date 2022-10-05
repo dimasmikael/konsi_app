@@ -13,12 +13,12 @@ class LoginApiClient {
   User? get onAuthStateChanged => _firebaseAuth.currentUser;
 
   // // Criar usuário
-  Future<void> createUserWithEmailAndPassword(
-      UserModel? user) async {
+  Future createUserWithEmailAndPassword(
+      String email, String password) async {
     try {
       _firebaseAuth
           .createUserWithEmailAndPassword(
-          email: user!.email, password: user.password);
+          email: email, password: password);
       //     .then(
       //       (firebaseUser) {
       //     Navigator.pushReplacementNamed(context!, '/homeview');
@@ -43,11 +43,11 @@ class LoginApiClient {
   //
   //
   // // Fazer Login
-  Future<void> signInWithEmailAndPassword(UserModel? user) async {
+  Future signInWithEmailAndPassword(String email, String password) async {
     try {
       await _firebaseAuth
           .signInWithEmailAndPassword(
-          email: user!.email, password: user.password);
+          email: email, password: password);
       //     .then(
       //       (firebaseUser) {
       //     Navigator.pushReplacementNamed(context!, '/homeview');
