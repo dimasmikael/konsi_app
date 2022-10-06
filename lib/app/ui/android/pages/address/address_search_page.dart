@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:konsi_app/app/ui/android/components/buttons/custom_outlined_buttonn.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 
@@ -12,8 +13,8 @@ class AddressSearchPage extends StatefulWidget {
 }
 
 class _AddressSearchPageState extends State<AddressSearchPage> {
-  String address = "null";
-  String autocompletePlace = "null";
+  String address = "";
+  String autocompletePlace = "";
   String? _currentAddress;
   Position? _currentPosition;
 
@@ -110,34 +111,14 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
               }
             },
           ),
-          const Spacer(),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              "Google Map Location Picker\nMade By Arvind 😃 with Flutter 🚀",
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.2,
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
+          const SizedBox(
+            height: 15,
           ),
-          TextButton(
-            onPressed: () => Clipboard.setData(
-              const ClipboardData(text: "https://www.mohesu.com"),
-            ).then(
-              (value) => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Copied to Clipboard"),
-                ),
-              ),
-            ),
-            child: const Text("https://www.mohesu.com"),
-          ),
-          const Spacer(),
           Center(
-            child: ElevatedButton(
-              child: const Text('Pick location'),
+            child: CustomOutlinedButton(
+              height: 80,
+              width: 300,
+              text: 'Escolha o local no Mapa',
               onPressed: () async {
                 Navigator.push(
                   context,
@@ -145,7 +126,6 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
                     builder: (context) {
                       return SizedBox(
                           height: WidgetSizeConfig.screenHeight,
-
                           child: Column(children: [
                             Expanded(
                               child: MapLocationPicker(
@@ -183,11 +163,14 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
           ),
           const Spacer(),
           ListTile(
-            title: Text("Geocoded Address: $address"),
+            title: Text("Endereço com toque no Mapa: $address"),
           ),
+          TextButton(onPressed: () {}, child: const Text('Slavr')),
           ListTile(
-            title: Text("Autocomplete Address: $autocompletePlace"),
+            title: Text(
+                "Endereço de preenchimento automático: $autocompletePlace"),
           ),
+          TextButton(onPressed: () {}, child: const Text('Slavr')),
           const Spacer(
             flex: 3,
           ),

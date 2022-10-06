@@ -4,6 +4,7 @@ import 'package:konsi_app/app/data/models/user_model.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/mixins/validations_mixin.dart';
 import 'package:konsi_app/app/routes/routes.dart';
+import 'package:konsi_app/app/ui/android/components/buttons/custom_outlined_buttonn.dart';
 import 'package:konsi_app/app/ui/android/components/form/custom_button.dart';
 import 'package:konsi_app/app/ui/android/components/form/custom_input.dart';
 import 'package:konsi_app/app/ui/android/components/style/text_style.dart';
@@ -205,21 +206,15 @@ class _RegistrationPageState extends State<RegistrationPage>
                       ),
                 ),
 
-            SizedBox(width: 150,
-              height: 50,
-              child:
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.teal,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pushReplacementNamed(Routes.login);
-                  },
-                  child: const Text('Entrar',style: TextStyle(fontSize: 20),),
-                ),   )
+                CustomOutlinedButton(
+                  height: 50,
+                  width: 150,
+                  text: 'Entrar',
+                    onPressed: () {
+          Navigator.of(context).pushReplacementNamed(Routes.login);
+          },
+                ),
+
               ],
             ),
           ),

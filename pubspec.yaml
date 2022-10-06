@@ -23,6 +23,7 @@ dependencies:
   geolocator:
   geocoding:
   map_location_picker:
+  google_fonts: ^3.0.1
 
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget textFormSignIn(String text) {
   return Text(
@@ -49,6 +50,21 @@ Widget textAlert(String texto) {
     maxLines: 5,
     style: TextStyle(
       fontSize: WidgetSizeConfig.safeBlockHorizontal! * 3.5,
+    ),
+  );
+}
+
+Widget textAppBar(String text) {
+  return Align(
+    alignment: Alignment.center,
+    child: Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: GoogleFonts.roboto(
+        color: Colors.white,
+        fontSize: WidgetSizeConfig.safeBlockHorizontal! * 6,
+      ),
     ),
   );
 }

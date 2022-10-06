@@ -69,70 +69,70 @@ class AddressProvider extends ChangeNotifier {
     }
   }
 
-  saveAddress(String id, AddressModel address, BuildContext context) {
-    try {
-      User? loggedUser = auth.currentUser!;
-      String? idUserLogged = loggedUser.uid;
-
-      db
-          .collection("my-addresses")
-          .doc(idUserLogged)
-          .collection("addresses")
-          .doc(id)
-          .set(address.toMap())
-          .then(
-            (_) {
-          Navigator.pop(context);
-          Navigator.pop(context);
-        },
-      );
-      alert.success(context, 'Endereço salvo com sucesso');
-    } on FirebaseAuthException catch (error) {
-      print(error);
-      alert.error(
-        context!,
-        error.toString(),
-      );
-    } catch (e) {
-      print(e);
-      alert.error(
-        context!,
-        e.toString(),
-      );
-    }
-  }
-
-  updateAddress(String id, AddressModel address, BuildContext context) {
-    try {
-      User? loggedUser = auth.currentUser!;
-      String? idUserLogged = loggedUser.uid;
-
-      db
-          .collection("my-addresses")
-          .doc(idUserLogged)
-          .collection("addresses")
-          .doc(id)
-          .update(address.toMap())
-          .then(
-            (_) {
-          Navigator.pop(context);
-          Navigator.pop(context);
-        },
-      );
-
-      alert.success(context, 'Endereço atualizado com sucesso');
-    } on FirebaseAuthException catch (error) {
-      print(error);
-      alert.error(
-        context!,
-        error.toString(),
-      );
-    } catch (e) {
-      print(e);
-      alert.error(
-        context!,
-        e.toString(),
-      );
-    }
-  }
+  // saveAddress(String id, AddressModel address, BuildContext context) {
+  //   try {
+  //     User? loggedUser = auth.currentUser!;
+  //     String? idUserLogged = loggedUser.uid;
+  //
+  //     db
+  //         .collection("my-addresses")
+  //         .doc(idUserLogged)
+  //         .collection("addresses")
+  //         .doc(id)
+  //         .set(address.toMap())
+  //         .then(
+  //           (_) {
+  //         Navigator.pop(context);
+  //         Navigator.pop(context);
+  //       },
+  //     );
+  //     alert.success(context, 'Endereço salvo com sucesso');
+  //   } on FirebaseAuthException catch (error) {
+  //     print(error);
+  //     alert.error(
+  //       context!,
+  //       error.toString(),
+  //     );
+  //   } catch (e) {
+  //     print(e);
+  //     alert.error(
+  //       context!,
+  //       e.toString(),
+  //     );
+  //   }
+  // }
+  //
+  // updateAddress(String id, AddressModel address, BuildContext context) {
+  //   try {
+  //     User? loggedUser = auth.currentUser!;
+  //     String? idUserLogged = loggedUser.uid;
+  //
+  //     db
+  //         .collection("my-addresses")
+  //         .doc(idUserLogged)
+  //         .collection("addresses")
+  //         .doc(id)
+  //         .update(address.toMap())
+  //         .then(
+  //           (_) {
+  //         Navigator.pop(context);
+  //         Navigator.pop(context);
+  //       },
+  //     );
+  //
+  //     alert.success(context, 'Endereço atualizado com sucesso');
+  //   } on FirebaseAuthException catch (error) {
+  //     print(error);
+  //     alert.error(
+  //       context!,
+  //       error.toString(),
+  //     );
+  //   } catch (e) {
+  //     print(e);
+  //     alert.error(
+  //       context!,
+  //       e.toString(),
+  //     );
+  //   }
+  // }
 }
