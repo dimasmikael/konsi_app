@@ -29,7 +29,7 @@ class MyAddressItem extends StatelessWidget {
           // verticalOffset: -850,
           child: Container(
             margin: EdgeInsets.only(bottom: width / 20),
-            height: width / 2,
+            height: width / 2.5,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: const BorderRadius.all(Radius.circular(20)),

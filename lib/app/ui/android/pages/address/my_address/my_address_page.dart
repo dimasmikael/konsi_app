@@ -142,7 +142,7 @@ class _MyAddressPageState extends State<MyAddressPage> {
                       address: address,
                       index,
                       onPressedRemover: () {
-                        // _showRemovalDialog(context, address.id);
+                     _showRemovalDialog(context, address.id);
                       },
                     );
 
