@@ -38,8 +38,6 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
     super.initState();
   }
 
-
-
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -98,10 +96,16 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final addressProvider = Provider.of<AddressProvider>(context);
+    print("autocompletePlace");
+    print(autocompletePlace);
+    print("_addressModel?.address ?");
+    print(_addressModel?.address ?? "kkrtrrrrtrt");
 
-    final addresProvider = Provider.of<AddressProvider>(context);
-    print(_currentPosition?.latitude);
-    print(_currentPosition?.longitude);
+    // setState(() {
+    //   _addressModel!.address =autocompletePlace;
+    // });
+
     WidgetSizeConfig().init(context);
     //  Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     return Scaffold(
@@ -153,6 +157,8 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
                                   if (result != null) {
                                     setState(() {
                                       address = result.formattedAddress ?? "";
+                                      _addressModel?.address =
+                                          address;
                                     });
                                   }
                                 },
@@ -162,6 +168,9 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
                                     setState(() {
                                       autocompletePlace =
                                           result.result.formattedAddress ?? "";
+
+                                      _addressModel?.address =
+                                          autocompletePlace;
                                     });
                                   }
                                 },
@@ -183,7 +192,15 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
           ),
           CustomTextButton(
               text: 'Salvar endereço do Mapa',
-              onPressed: () {},
+              onPressed: () {
+                if (address != '') {
+                  loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
+                  addressProvider.saveAddress(
+                      _addressModel!.id, _addressModel!, context);
+                } else {
+                  _alert.error(context, 'Escolha um endereço');
+                }
+              },
               icon: const Icon(Icons.save),
               foregroundColor: Colors.orangeAccent),
           const SizedBox(
@@ -196,15 +213,11 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
           CustomTextButton(
               text: 'Salvar endereço do\n preenchimento automático',
               onPressed: () {
-
-                if(autocompletePlace !='') {
-                  setState(() {
-                    _addressModel!.address ==autocompletePlace;
-                  });
+                if (autocompletePlace != '') {
                   loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
-                  addresProvider.saveAddress(
+                  addressProvider.saveAddress(
                       _addressModel!.id, _addressModel!, context);
-                }else{
+                } else {
                   _alert.error(context, 'Escolha um endereço');
                 }
               },
