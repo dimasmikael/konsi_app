@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:konsi_app/app/data/models/address_model.dart';
 import 'package:konsi_app/app/data/providers/address_provider.dart';
+import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/android/components/alerts/alert.dart';
 import 'package:konsi_app/app/ui/android/components/appbar/custom_appbar.dart';
 import 'package:konsi_app/app/ui/android/components/buttons/custom_outlined_buttonn.dart';
 import 'package:konsi_app/app/ui/android/components/buttons/custom_text_button.dart';
+import 'package:konsi_app/app/ui/android/components/form/custom_button.dart';
 import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:map_location_picker/map_location_picker.dart';
@@ -107,238 +109,158 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
     print(autocompletePlace);
     print("_addressModel?.address ?");
     print(_addressModel?.address ?? "kkrtrrrrtrt");
-
     // setState(() {
-    //   _addressModel!.address =autocompletePlace;
+    //   autocompletePlace;
     // });
 
     WidgetSizeConfig().init(context);
-    //  Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(text: 'Procurar Endereço'),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          PlacesAutocomplete(
-            searchController: _controller,
-            apiKey: "AIzaSyC2VFeO4QgqJz7-Ao5GY_JdtHwMFNl8-b4",
-            mounted: mounted,
-            showBackButton: false,
-            onGetDetailsByPlaceId: (PlacesDetailsResponse? result) {
-              if (result != null) {
-                setState(() {
+      body: SingleChildScrollView(
+          child: Column(children: <Widget>[
+        PlacesAutocomplete(
+          searchController: _controller,
+          apiKey: "AIzaSyC2VFeO4QgqJz7-Ao5GY_JdtHwMFNl8-b4",
+          mounted: mounted,
+          showBackButton: false,
+          onGetDetailsByPlaceId: (PlacesDetailsResponse? result) {
+            if (result != null) {
+              setState(
+                () {
                   autocompletePlace = result.result.formattedAddress ?? "";
-                });
-              }
-            },
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Center(
-            child: CustomOutlinedButton(
-              height: 60,
-              width: 250,
-              text: 'Escolha o local no Mapa',
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return SizedBox(
-                          height: WidgetSizeConfig.screenHeight,
-                          child: Column(children: [
-                            Expanded(
-                              child: MapLocationPicker(
-                                language: 'pt-br',
-                                apiKey:
-                                    "AIzaSyC2VFeO4QgqJz7-Ao5GY_JdtHwMFNl8-b4",
-                                canPopOnNextButtonTaped: true,
-                                currentLatLng: LatLng(
-                                    _currentPosition?.latitude ?? 0,
-                                    _currentPosition?.longitude ?? 0),
-                                onNext: (GeocodingResult? result) {
-                                  if (result != null) {
-                                    setState(() {
-                                      address = result.formattedAddress ?? "";
-                                      _addressModel?.address = address;
-                                    });
-                                  }
-                                },
-                                onSuggestionSelected:
-                                    (PlacesDetailsResponse? result) {
-                                  if (result != null) {
-                                    setState(() {
+                },
+              );
+            }
+          },
+        ),
+        CustomOutlinedButton(
+            color: Colors.teal,
+            height: 70,
+            width: 270,
+            text: 'Escolha o local no Mapa',
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return SizedBox(
+                      height: WidgetSizeConfig.screenHeight,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: MapLocationPicker(
+                              language: 'pt-br',
+                              apiKey: "AIzaSyC2VFeO4QgqJz7-Ao5GY_JdtHwMFNl8-b4",
+                              canPopOnNextButtonTaped: true,
+                              currentLatLng: LatLng(
+                                  _currentPosition?.latitude ?? 0,
+                                  _currentPosition?.longitude ?? 0),
+                              onNext: (GeocodingResult? result) {
+                                if (result != null) {
+                                  setState(() {
+                                    address = result.formattedAddress ?? "";
+                                    autocompletePlace = address;
+                                    //  _addressModel?.address =autocompletePlace;
+                                  });
+                                }
+                              },
+                              onSuggestionSelected:
+                                  (PlacesDetailsResponse? result) {
+                                if (result != null) {
+                                  setState(
+                                    () {
                                       autocompletePlace =
                                           result.result.formattedAddress ?? "";
 
-                                      _addressModel?.address =
-                                          autocompletePlace;
-                                    });
-                                  }
-                                },
-                              ),
+                                      // _addressModel?.address ==
+                                      //     autocompletePlace;
+                                    },
+                                  );
+                                }
+                              },
                             ),
-                          ]));
-                    },
-                  ),
-                );
-              },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            }),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            padding: const EdgeInsets.only(left: 15, top: 10),
+            child: const Text(
+              "Endereço:",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
           ),
-          Column(children: [
-
-SizedBox(height: 10,),
-
-            Container(
-
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
+        ),
+        Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.all(20),
+          height: 200,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30), //border corner radius
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5), //color of shadow
+                spreadRadius: 5, //spread radius
+                blurRadius: 7, // blur radius
+                offset: const Offset(0, 2), // changes position of shadow
+                //first paramerter of offset is left-right
+                //second parameter is top to down
               ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                          "Endereço com toque no Mapa: $address",
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(12), bottomLeft: Radius.circular(12))
-                    ),
-                    padding: const EdgeInsets.all(12),
-                    child:  CustomTextButton(
-                      text: 'Salvar endereço do Mapa',
-                      onPressed: () {
-                        if (address != '') {
-                          loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
-                          addressProvider.saveAddress(
-                              _addressModel!.id, _addressModel!, context);
-                        } else {
-                          _alert.error(context, 'Escolha um endereço');
-                        }
-                      },
-                      icon: const Icon(Icons.save),
-                      foregroundColor: Colors.white),
-                  )
-
-
-                ],
+              //you can set more BoxShadow() here
+            ],
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              autocompletePlace,
+              style: TextStyle(
+                fontSize: 20,
               ),
             ),
-            SizedBox(height: 10,),
-
-            Container(
-
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.black,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      "Endereço com\n preenchimento automático: $address",
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(12), bottomLeft: Radius.circular(12))
-                    ),
-                    padding: const EdgeInsets.all(12),
-                    child: CustomTextButton(
-                        text: 'Salvar endereço do\n preenchimento automático',
-                        onPressed: () {
-                          if (autocompletePlace != '') {
-                            loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
-                            addressProvider.saveAddress(
-                                _addressModel!.id, _addressModel!, context);
-                          } else {
-                            _alert.error(context, 'Escolha um endereço');
-                          }
-                        },
-                        icon: const Icon(Icons.save),
-                        foregroundColor: Colors.black),
-                  )
-
-
-                ],
-              ),
-            )
-
-          ],)
-          // const Spacer(),
-          // ListTile(
-          //   title: Text(
-          //     "Endereço com toque no Mapa: $address",
-          //     style: const TextStyle(color: Colors.orangeAccent),
-          //   ),
-          // ),
-          // CustomTextButton(
-          //     text: 'Salvar endereço do Mapa',
-          //     onPressed: () {
-          //       if (address != '') {
-          //         loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
-          //         addressProvider.saveAddress(
-          //             _addressModel!.id, _addressModel!, context);
-          //       } else {
-          //         _alert.error(context, 'Escolha um endereço');
-          //       }
-          //     },
-          //     icon: const Icon(Icons.save),
-          //     foregroundColor: Colors.orangeAccent),
-          // const SizedBox(
-          //   height: 10,
-          // ),
-          // ListTile(
-          //
-          //   title: Text(
-          //       "Endereço de preenchimento automático:",style: const TextStyle(color: Colors.brown,fontWeight: FontWeight.bold,fontSize: 15),),
-          //
-          // subtitle: Text(autocompletePlace,style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20)),),
-          // CustomTextButton(
-          //     text: 'Salvar endereço do\n preenchimento automático',
-          //     onPressed: () {
-          //       if (autocompletePlace != '') {
-          //         loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
-          //         addressProvider.saveAddress(
-          //             _addressModel!.id, _addressModel!, context);
-          //       } else {
-          //         _alert.error(context, 'Escolha um endereço');
-          //       }
-          //     },
-          //     icon: const Icon(Icons.save),
-          //     foregroundColor: Colors.black),
-          ,const Spacer(
-            flex: 3,
           ),
-        ],
-      ),
+        ),
+        CustomOutlinedButton(
+          icon: const Icon(Icons.save),
+          color: Colors.black,
+          height: 60,
+          width: WidgetSizeConfig.screenWidth! * .70,
+          text: 'Salvar Endereço',
+          onPressed: () async {
+            if (autocompletePlace == '' || autocompletePlace == null) {
+              _alert.error(context, 'Escolha um endereço');
+
+              //  Navigator.pushReplacementNamed(context, Routes.addressSearch);
+            } else {
+              setState(() {
+                _addressModel?.address = autocompletePlace;
+              });
+              addressProvider.saveAddress(
+                  _addressModel!.id, _addressModel!, context);
+              loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
+
+              setState(() {
+                autocompletePlace == null;
+                _addressModel?.id == null;
+                // Navigator.pushReplacementNamed(context, Routes.addressSearch);
+                _addressModel = AddressModel.generateId();
+              });
+            }
+          },
+        ),
+      ])),
     );
   }
 }

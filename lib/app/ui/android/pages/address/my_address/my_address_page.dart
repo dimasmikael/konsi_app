@@ -153,11 +153,7 @@ class _MyAddressPageState extends State<MyAddressPage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).pushNamed(Routes.addressSearch),
-        label: const Text('Buscar Endereço'),
-        icon: const Icon(Icons.add),
-      ),
+
     );
   }
 }

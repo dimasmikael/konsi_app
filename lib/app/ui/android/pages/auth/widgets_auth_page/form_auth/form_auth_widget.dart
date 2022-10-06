@@ -201,6 +201,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
             _buildSignupBtn(),
             const SizedBox(height: 10.0),
             CustomOutlinedButton(
+              color: Colors.teal,
               height: 50,
               width: 150,
               text: 'Cadastrar',

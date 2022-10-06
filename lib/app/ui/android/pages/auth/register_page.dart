@@ -207,6 +207,7 @@ class _RegistrationPageState extends State<RegistrationPage>
                 ),
 
                 CustomOutlinedButton(
+                  color: Colors.teal,
                   height: 50,
                   width: 150,
                   text: 'Entrar',

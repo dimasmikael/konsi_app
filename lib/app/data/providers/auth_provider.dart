@@ -10,15 +10,10 @@ class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final Alert _alert = Alert();
-  //final LoadingWidget loadingWidget = LoadingWidget();
+
   User? loggedUser;
   GoogleSignInAccount? loggedUserGoogle;
   bool mounted = false;
-
-  // checkLoggedUser() {
-  //   loggedUser = _auth.currentUser;
-  //   return loggedUser;
-  // }
 
   Future registerWithEmailAndPassword(
       UserModel? user, BuildContext? context) async {

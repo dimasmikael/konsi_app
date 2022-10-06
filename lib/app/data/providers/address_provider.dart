@@ -54,7 +54,9 @@ class AddressProvider extends ChangeNotifier {
           controllerStream.add(data);
         },
       );
-      alert.success(context, 'Endereço(s) carregados com sucesso');
+      notifyListeners();
+    //  alert.success(context, 'Endereço(s) carregados com sucesso');
+
     } on FirebaseAuthException catch (error) {
       print(error);
 
@@ -87,11 +89,12 @@ class AddressProvider extends ChangeNotifier {
           .then(
             (_) {
           Navigator.pop(context);
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
       );
-      notifyListeners();
+
       alert.success(context, 'Endereço salvo com sucesso');
+      notifyListeners();
     } on FirebaseAuthException catch (error) {
       print(error);
       alert.error(
