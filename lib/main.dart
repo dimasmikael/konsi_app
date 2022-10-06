@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:konsi_app/app/data/providers/address_provider.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/theme/app_theme.dart';
@@ -21,6 +22,8 @@ void main() async {
           providers: [
             ChangeNotifierProvider<AuthProvider>(
               create: (context) => AuthProvider(),
+            ), ChangeNotifierProvider<AddressProvider >(
+              create: (context) => AddressProvider (),
             ),
           ],
           child: MaterialApp(

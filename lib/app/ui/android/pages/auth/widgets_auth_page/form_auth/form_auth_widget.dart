@@ -35,7 +35,7 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
     with ValidationMixin {
   bool _isObscure = true;
   UserModel? user = UserModel();
- // final LoadingWidget loadingWidget = LoadingWidget();
+  // final LoadingWidget loadingWidget = LoadingWidget();
 
   Widget _buildSignInWithText() {
     return Column(
@@ -99,10 +99,12 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
   Widget build(BuildContext context) {
     WidgetSizeConfig().init(context);
 
-    setState(() {
-      user?.email = widget.emailTextController!.text;
-      user?.password = widget.passwordTextController!.text;
-    });
+    setState(
+      () {
+        user?.email = widget.emailTextController!.text;
+        user?.password = widget.passwordTextController!.text;
+      },
+    );
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,

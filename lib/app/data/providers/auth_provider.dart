@@ -5,7 +5,7 @@ import 'package:konsi_app/app/data/models/user_model.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/android/components/alerts/alert.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
+
 
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;

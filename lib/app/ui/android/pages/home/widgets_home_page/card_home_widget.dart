@@ -1,67 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
+import 'package:konsi_app/app/routes/routes.dart';
+import 'package:konsi_app/app/ui/android/components/card/custom_card.dart';
 
-class CardHomeWidget extends StatelessWidget {
-  const CardHomeWidget(
-      {Key? key,
-      required this.text,
-      required this.colorIcon,
-      required this.colorCard,
-      required this.icon,
-      required this.onTap})
-      : super(key: key);
 
-  final String? text;
-  final Color? colorIcon, colorCard;
-  final IconData? icon;
-  final void Function()? onTap;
+class HomeCardWidget extends StatelessWidget {
+  const HomeCardWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    WidgetSizeConfig().init(context);
-
-    double width = WidgetSizeConfig.screenWidth!;
-    double height = WidgetSizeConfig.screenHeight!;
-    return Center(
+    return     Container(
+      margin: const EdgeInsets.only(top: 40),
       child: Padding(
-        padding: const EdgeInsets.only(
-          left: 10.0,
-          right: 10,
-          bottom: 20,
-        ),
-        child: SizedBox(
-          height: height * .30,
-          width: width * .70,
-          child: Card(
-            elevation: 10,
-            color: colorCard,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              side: BorderSide(color: Colors.white),
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CustomCard (
+              icon: Icons.map,
+              colorCard: Colors.green,
+              colorIcon: Colors.white,
+              text: "Meus Endereços",
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(Routes.home);
+
+              },
             ),
-            child: InkWell(
-              onTap: onTap,
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(
-                      icon,
-                      size: 80,
-                      color: colorIcon,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        text!,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 25),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+            CustomCard (
+              icon: Icons.add_location,
+              colorCard: Colors.black,
+              colorIcon: Colors.white,
+              text: "Buscar Endereços",
+              onTap: () {
+                Navigator.of(context).pushNamed(Routes.addressSearch);
+
+              },
             ),
-          ),
+          ],
         ),
       ),
     );
