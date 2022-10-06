@@ -57,6 +57,9 @@ class AddressProvider extends ChangeNotifier {
       alert.success(context, 'Endereço(s) carregados com sucesso');
     } on FirebaseAuthException catch (error) {
       print(error);
+
+      accessDataOffline_configure();
+      accessDataOffline_configureCache();
       alert.error(
         context!,
         error.toString(),
@@ -103,7 +106,25 @@ class AddressProvider extends ChangeNotifier {
       );
     }
   }
-  //
+
+  void accessDataOffline_configure() async {
+    // [START access_data_offline_configure_offline_persistence]
+    // Apple and Android
+    db.settings = const Settings(persistenceEnabled: true);
+
+
+  }
+
+  void accessDataOffline_configureCache() {
+    // [START access_data_offline_configure_cache_size]
+    db.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    );
+    // [END access_data_offline_configure_cache_size]
+  }
+
+//
   // updateAddress(String id, AddressModel address, BuildContext context) {
   //   try {
   //     User? loggedUser = auth.currentUser!;

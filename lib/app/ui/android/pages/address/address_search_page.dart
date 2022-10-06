@@ -38,6 +38,12 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    print("kkkkkkkkkkkkkkkk");
+    super.dispose();
+  }
+
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -157,8 +163,7 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
                                   if (result != null) {
                                     setState(() {
                                       address = result.formattedAddress ?? "";
-                                      _addressModel?.address =
-                                          address;
+                                      _addressModel?.address = address;
                                     });
                                   }
                                 },
@@ -183,47 +188,153 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
               },
             ),
           ),
-          const Spacer(),
-          ListTile(
-            title: Text(
-              "Endereço com toque no Mapa: $address",
-              style: const TextStyle(color: Colors.orangeAccent),
+          Column(children: [
+
+SizedBox(height: 10,),
+
+            Container(
+
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(
+                          "Endereço com toque no Mapa: $address",
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(12), bottomLeft: Radius.circular(12))
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    child:  CustomTextButton(
+                      text: 'Salvar endereço do Mapa',
+                      onPressed: () {
+                        if (address != '') {
+                          loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
+                          addressProvider.saveAddress(
+                              _addressModel!.id, _addressModel!, context);
+                        } else {
+                          _alert.error(context, 'Escolha um endereço');
+                        }
+                      },
+                      icon: const Icon(Icons.save),
+                      foregroundColor: Colors.white),
+                  )
+
+
+                ],
+              ),
             ),
-          ),
-          CustomTextButton(
-              text: 'Salvar endereço do Mapa',
-              onPressed: () {
-                if (address != '') {
-                  loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
-                  addressProvider.saveAddress(
-                      _addressModel!.id, _addressModel!, context);
-                } else {
-                  _alert.error(context, 'Escolha um endereço');
-                }
-              },
-              icon: const Icon(Icons.save),
-              foregroundColor: Colors.orangeAccent),
-          const SizedBox(
-            height: 10,
-          ),
-          ListTile(
-            title: Text(
-                "Endereço de preenchimento automático: $autocompletePlace"),
-          ),
-          CustomTextButton(
-              text: 'Salvar endereço do\n preenchimento automático',
-              onPressed: () {
-                if (autocompletePlace != '') {
-                  loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
-                  addressProvider.saveAddress(
-                      _addressModel!.id, _addressModel!, context);
-                } else {
-                  _alert.error(context, 'Escolha um endereço');
-                }
-              },
-              icon: const Icon(Icons.save),
-              foregroundColor: Colors.black),
-          const Spacer(
+            SizedBox(height: 10,),
+
+            Container(
+
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.black,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(
+                      "Endereço com\n preenchimento automático: $address",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(12), bottomLeft: Radius.circular(12))
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    child: CustomTextButton(
+                        text: 'Salvar endereço do\n preenchimento automático',
+                        onPressed: () {
+                          if (autocompletePlace != '') {
+                            loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
+                            addressProvider.saveAddress(
+                                _addressModel!.id, _addressModel!, context);
+                          } else {
+                            _alert.error(context, 'Escolha um endereço');
+                          }
+                        },
+                        icon: const Icon(Icons.save),
+                        foregroundColor: Colors.black),
+                  )
+
+
+                ],
+              ),
+            )
+
+          ],)
+          // const Spacer(),
+          // ListTile(
+          //   title: Text(
+          //     "Endereço com toque no Mapa: $address",
+          //     style: const TextStyle(color: Colors.orangeAccent),
+          //   ),
+          // ),
+          // CustomTextButton(
+          //     text: 'Salvar endereço do Mapa',
+          //     onPressed: () {
+          //       if (address != '') {
+          //         loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
+          //         addressProvider.saveAddress(
+          //             _addressModel!.id, _addressModel!, context);
+          //       } else {
+          //         _alert.error(context, 'Escolha um endereço');
+          //       }
+          //     },
+          //     icon: const Icon(Icons.save),
+          //     foregroundColor: Colors.orangeAccent),
+          // const SizedBox(
+          //   height: 10,
+          // ),
+          // ListTile(
+          //
+          //   title: Text(
+          //       "Endereço de preenchimento automático:",style: const TextStyle(color: Colors.brown,fontWeight: FontWeight.bold,fontSize: 15),),
+          //
+          // subtitle: Text(autocompletePlace,style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20)),),
+          // CustomTextButton(
+          //     text: 'Salvar endereço do\n preenchimento automático',
+          //     onPressed: () {
+          //       if (autocompletePlace != '') {
+          //         loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
+          //         addressProvider.saveAddress(
+          //             _addressModel!.id, _addressModel!, context);
+          //       } else {
+          //         _alert.error(context, 'Escolha um endereço');
+          //       }
+          //     },
+          //     icon: const Icon(Icons.save),
+          //     foregroundColor: Colors.black),
+          ,const Spacer(
             flex: 3,
           ),
         ],

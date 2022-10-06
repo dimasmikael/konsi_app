@@ -6,7 +6,6 @@ import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/android/components/alerts/alert.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
