@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:konsi_app/app/ui/android/components/buttons/custom_outlined_buttonn.dart';
+import 'package:konsi_app/app/ui/android/components/buttons/custom_text_button.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 
@@ -165,12 +166,14 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
           ListTile(
             title: Text("Endereço com toque no Mapa: $address"),
           ),
-          TextButton(onPressed: () {}, child: const Text('Slavr')),
+
+          CustomTextButton( text: 'Salvar endereço do Mapa', onPressed: (){}, icon: const Icon(Icons.save), foregroundColor: Colors.amberAccent),
+
           ListTile(
             title: Text(
                 "Endereço de preenchimento automático: $autocompletePlace"),
           ),
-          TextButton(onPressed: () {}, child: const Text('Slavr')),
+          CustomTextButton( text: 'Salvar endereço do preenchimento automático', onPressed: (){}, icon: const Icon(Icons.save), foregroundColor: Colors.black),
           const Spacer(
             flex: 3,
           ),

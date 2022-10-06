@@ -1,15 +1,3 @@
-// class UserModel {
-//   String uid;
-//   String? email;
-//   String? password;
-//
-//   UserModel({
-//     required this.uid,
-//     this.email,
-//     this.password,
-//   });
-// }
-
 class UserModel {
   String? _idUser;
   String? _name;
@@ -35,7 +23,6 @@ class UserModel {
   set email(String value) {
     _email = value;
   }
-
 
   String get name => _name!;
 

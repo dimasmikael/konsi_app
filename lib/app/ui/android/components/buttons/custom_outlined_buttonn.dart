@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class CustomOutlinedButton extends StatelessWidget {
   const CustomOutlinedButton({Key? key, required this.height,required this.width,required this.text,required this.onPressed}) : super(key: key);
 
-  final double? width; final double? height;
-  final void Function()? onPressed;
-  final String? text;
+  final double width; final double height;
+  final void Function() onPressed;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
