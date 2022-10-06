@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:konsi_app/app/data/models/address_model.dart';
+import 'package:konsi_app/app/data/providers/address_provider.dart';
+import 'package:konsi_app/app/ui/android/components/alerts/alert.dart';
+import 'package:konsi_app/app/ui/android/components/appbar/custom_appbar.dart';
 import 'package:konsi_app/app/ui/android/components/buttons/custom_outlined_buttonn.dart';
 import 'package:konsi_app/app/ui/android/components/buttons/custom_text_button.dart';
+import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:map_location_picker/map_location_picker.dart';
+import 'package:provider/provider.dart';
 
 class AddressSearchPage extends StatefulWidget {
   const AddressSearchPage({Key? key}) : super(key: key);
@@ -18,15 +24,21 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
   String autocompletePlace = "";
   String? _currentAddress;
   Position? _currentPosition;
+  LoadingWidget loadingWidget = LoadingWidget();
+  final Alert _alert = Alert();
 
   final TextEditingController _controller = TextEditingController();
+  AddressModel? _addressModel;
 
   @override
   void initState() {
+    _addressModel = AddressModel.generateId();
     _handleLocationPermission();
     _getCurrentPosition();
     super.initState();
   }
+
+
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -86,15 +98,15 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final addresProvider = Provider.of<AddressProvider>(context);
     print(_currentPosition?.latitude);
     print(_currentPosition?.longitude);
     WidgetSizeConfig().init(context);
     //  Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text('location picker'),
-      ),
+      appBar: const CustomAppBar(text: 'Procurar Endereço'),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,8 +129,8 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
           ),
           Center(
             child: CustomOutlinedButton(
-              height: 80,
-              width: 300,
+              height: 60,
+              width: 250,
               text: 'Escolha o local no Mapa',
               onPressed: () async {
                 Navigator.push(
@@ -164,16 +176,40 @@ class _AddressSearchPageState extends State<AddressSearchPage> {
           ),
           const Spacer(),
           ListTile(
-            title: Text("Endereço com toque no Mapa: $address"),
+            title: Text(
+              "Endereço com toque no Mapa: $address",
+              style: const TextStyle(color: Colors.orangeAccent),
+            ),
           ),
-
-          CustomTextButton( text: 'Salvar endereço do Mapa', onPressed: (){}, icon: const Icon(Icons.save), foregroundColor: Colors.amberAccent),
-
+          CustomTextButton(
+              text: 'Salvar endereço do Mapa',
+              onPressed: () {},
+              icon: const Icon(Icons.save),
+              foregroundColor: Colors.orangeAccent),
+          const SizedBox(
+            height: 10,
+          ),
           ListTile(
             title: Text(
                 "Endereço de preenchimento automático: $autocompletePlace"),
           ),
-          CustomTextButton( text: 'Salvar endereço do preenchimento automático', onPressed: (){}, icon: const Icon(Icons.save), foregroundColor: Colors.black),
+          CustomTextButton(
+              text: 'Salvar endereço do\n preenchimento automático',
+              onPressed: () {
+
+                if(autocompletePlace !='') {
+                  setState(() {
+                    _addressModel!.address ==autocompletePlace;
+                  });
+                  loadingWidget.openLoadingDialog(context, 'Salvando Endereço');
+                  addresProvider.saveAddress(
+                      _addressModel!.id, _addressModel!, context);
+                }else{
+                  _alert.error(context, 'Escolha um endereço');
+                }
+              },
+              icon: const Icon(Icons.save),
+              foregroundColor: Colors.black),
           const Spacer(
             flex: 3,
           ),

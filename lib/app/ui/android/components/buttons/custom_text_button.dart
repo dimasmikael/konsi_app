@@ -17,18 +17,23 @@ class CustomTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
+    return
+      SizedBox(
+        height: 50,
+      child:
+
+      TextButton.icon(
         label: Text(text),
         icon: icon,
         style: TextButton.styleFrom(
-          side: BorderSide(color: Colors.red, width: 5),
+          side: const BorderSide(color: Colors.greenAccent, width: 1),
           foregroundColor: foregroundColor,
           textStyle: const TextStyle(
               color: Colors.black,
-              fontSize: 20,
+              fontSize: 15,
               fontStyle: FontStyle.italic
           ),
         ),
-        onPressed: onPressed);
+        onPressed: onPressed),);
   }
 }

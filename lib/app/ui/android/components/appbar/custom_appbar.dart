@@ -21,7 +21,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         centerTitle: true,
         elevation: 2,
         iconTheme: IconThemeData(
-            size: WidgetSizeConfig.safeBlockHorizontal! * 6, color: Colors.white),
+            size: WidgetSizeConfig.safeBlockHorizontal! * 6, ),
         title: textAppBar(text!),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:konsi_app/app/ui/android/components/appbar/custom_appbar.dart';
 
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:konsi_app/app/ui/android/pages/config/config_page.dart';
@@ -31,12 +32,8 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Dashboard",
-          textAlign: TextAlign.center,
-        ),
-      ),
+      appBar: const CustomAppBar(text: 'Konsi App'),
+
       body: _pageNo[selectedpage],
       bottomNavigationBar: ConvexAppBar(
         color: Colors.white,

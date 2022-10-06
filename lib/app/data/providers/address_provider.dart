@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:konsi_app/app/data/models/address_model.dart';
 import 'package:konsi_app/app/data/models/user_model.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/android/components/alerts/alert.dart';
@@ -69,38 +70,39 @@ class AddressProvider extends ChangeNotifier {
     }
   }
 
-  // saveAddress(String id, AddressModel address, BuildContext context) {
-  //   try {
-  //     User? loggedUser = auth.currentUser!;
-  //     String? idUserLogged = loggedUser.uid;
-  //
-  //     db
-  //         .collection("my-addresses")
-  //         .doc(idUserLogged)
-  //         .collection("addresses")
-  //         .doc(id)
-  //         .set(address.toMap())
-  //         .then(
-  //           (_) {
-  //         Navigator.pop(context);
-  //         Navigator.pop(context);
-  //       },
-  //     );
-  //     alert.success(context, 'Endereço salvo com sucesso');
-  //   } on FirebaseAuthException catch (error) {
-  //     print(error);
-  //     alert.error(
-  //       context!,
-  //       error.toString(),
-  //     );
-  //   } catch (e) {
-  //     print(e);
-  //     alert.error(
-  //       context!,
-  //       e.toString(),
-  //     );
-  //   }
-  // }
+  saveAddress(String id, AddressModel address, BuildContext context) {
+    try {
+      User? loggedUser = auth.currentUser!;
+      String? idUserLogged = loggedUser.uid;
+
+      db
+          .collection("my-addresses")
+          .doc(idUserLogged)
+          .collection("addresses")
+          .doc(id)
+          .set(address.toMap())
+          .then(
+            (_) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+      );
+      notifyListeners();
+      alert.success(context, 'Endereço salvo com sucesso');
+    } on FirebaseAuthException catch (error) {
+      print(error);
+      alert.error(
+        context!,
+        error.toString(),
+      );
+    } catch (e) {
+      print(e);
+      alert.error(
+        context!,
+        e.toString(),
+      );
+    }
+  }
   //
   // updateAddress(String id, AddressModel address, BuildContext context) {
   //   try {

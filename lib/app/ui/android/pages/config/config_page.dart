@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:konsi_app/app/ui/android/components/appbar/custom_appbar.dart';
 import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
 import 'package:provider/provider.dart';
 import "dart:math";
@@ -74,7 +75,7 @@ class _ConfigPageState extends State<ConfigPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SingleChildScrollView(
