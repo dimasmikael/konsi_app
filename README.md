@@ -42,13 +42,18 @@ As seguintes ferramentas foram usadas na construção do projeto:
   </tr>
 </table>
 
-* [http](https://pub.dev/packages/http)
-* [cached_network_image](https://pub.dev/packages/cached_network_image)
-* [flutter_spinkit](https://pub.dev/packages/flutter_spinkit)
-* [google_fonts](https://pub.dev/packages/google_fonts) 
+* [cloud_firestore](https://pub.dev/packages/cloud_firestore)
+* [firebase_auth](https://pub.dev/packages/firebase_auth)
+* [google_sign_in](https://pub.dev/packages/google_sign_in)
+* [animated_splash_screen](https://pub.dev/packages/animated_splash_screen) 
+* [flutter_staggered_animations](https://pub.dev/packages/flutter_staggered_animationsr) 
 * [provider](https://pub.dev/packages/provider) 
-* [api_cache_manager](https://pub.dev/packages/api_cache_manager) 
-* [carousel_slider](https://pub.dev/packages/carousel_slider) 
+* [convex_bottom_bar](https://pub.dev/packages/convex_bottom_bar) 
+* [flutter_platform_widgets](https://pub.dev/packages/flutter_platform_widgets)
+* [geolocator](https://pub.dev/packages/geolocator)
+* [geocoding](https://pub.dev/packages/geocoding)
+* [map_location_picker](https://pub.dev/packages/map_location_picker)
+* [google_fonts](https://pub.dev/packages?q=google_fonts)
 
 
 ```bash
