@@ -67,7 +67,7 @@ Baixe ou clone este repositório usando o link abaixo:
 
 https://github.com/dimasmikael/konsi_app.git
 
-OBS:Necessario gerar um chave de API no https://console.cloud.google.com/ para usar dentro do projeto.
+OBS:Necessario gerar um chave de API no https://console.cloud.google.com/ para usar no projeto.
 
 
 **Passo 2:**
