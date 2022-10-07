@@ -42,7 +42,6 @@ class CustomdButtonFormWidget extends StatelessWidget {
             ),
             minimumSize: MaterialStateProperty.all(Size(width!, 50)),
             backgroundColor: MaterialStateProperty.all(Colors.transparent),
-            // elevation: MaterialStateProperty.all(3),
             shadowColor: MaterialStateProperty.all(Colors.transparent),
           ),
           onPressed: () {
@@ -57,7 +56,6 @@ class CustomdButtonFormWidget extends StatelessWidget {
               buttonText!,
               style: const TextStyle(
                 fontSize: 18,
-                // fontWeight: FontWeight.w700,
                 color: Colors.white,
               ),
             ),

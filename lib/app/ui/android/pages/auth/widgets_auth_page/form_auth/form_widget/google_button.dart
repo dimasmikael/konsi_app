@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/routes/routes.dart';
-import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +12,6 @@ class GoogleSignInButton extends StatefulWidget {
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
   bool isLoading = false;
-
-  // final LoadingWidget loadingWidget = LoadingWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +30,17 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 ),
               ),
               onPressed: () async {
-                setState(() {
-                  isLoading = true;
-                });
+                setState(
+                  () {
+                    isLoading = true;
+                  },
+                );
 
-            //    try {
-                  await authProvider.signInWithGoogle(context: context);
-              await     Navigator.pushNamedAndRemoveUntil(
-                      context, Routes.home, (route) => false);
-                // } catch (e) {
-                //   if (e is FirebaseAuthException) {
-                //     print(e.message!);
-                //   }
-                // }
+                await authProvider.signInWithGoogle(context: context);
+                if (!mounted) return;
+                await Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.home, (route) => false);
+
                 setState(() {
                   isLoading = false;
                 });
@@ -53,30 +48,29 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Image(
-                        image: AssetImage("assets/images/google-logo.png"),
-                        height: 35.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          'Entre com o  Google',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black54,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Widget>[
+                    Image(
+                      image: AssetImage("assets/images/google-logo.png"),
+                      height: 35.0,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Entre com o  Google',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ]),
+                    ),
+                  ],
+                ),
               ),
             ),
           )
         : const CircularProgressIndicator();
-
-
   }
 }

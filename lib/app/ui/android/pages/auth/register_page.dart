@@ -9,6 +9,7 @@ import 'package:konsi_app/app/ui/android/components/form/custom_button.dart';
 import 'package:konsi_app/app/ui/android/components/form/custom_input.dart';
 import 'package:konsi_app/app/ui/android/components/style/text_style.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
+import 'package:konsi_app/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -57,7 +58,6 @@ class _RegistrationPageState extends State<RegistrationPage>
                 fontWeight: FontWeight.w400,
               ),
             ),
-
             TextSpan(
               text: 'Entre aqui',
               style: TextStyle(
@@ -66,11 +66,6 @@ class _RegistrationPageState extends State<RegistrationPage>
                 fontWeight: FontWeight.bold,
               ),
             ),
-
-            // onPressed: () {
-            //   Navigator.of(context)
-            //       .pushReplacementNamed(Routes.register);
-            // },
           ],
         ),
       ),
@@ -117,15 +112,14 @@ class _RegistrationPageState extends State<RegistrationPage>
                   'Email',
                 ),
                 CustomInputForm(
-                    controller: _emailController,
-                    icon: Icons.email_outlined,
-                    hint: "Email",
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: false,
-                    validator: (val) => combine([
-                          () => isNotEmpty(val, 'Informe um email'),
-                          () => checkEmail(val),
-                        ])),
+                  controller: _emailController,
+                  icon: Icons.email_outlined,
+                  hint: "Email",
+                  keyboardType: TextInputType.emailAddress,
+                  obscureText: false,
+                  validator: (value) =>
+                      value.isValidEmail() ? null : "Verifique o seu  email",
+                ),
                 textLabelInput(
                   'Senha',
                 ),
@@ -151,71 +145,65 @@ class _RegistrationPageState extends State<RegistrationPage>
                   validator: (val) => combine(
                     [
                       () => isNotEmpty(val, 'Informe uma senha'),
-                      () => hasSevenChars(val)
+                      () => hasSevenChars(
+                          val, 'Você deve usar pelo menos 7 caracteres')
                     ],
                   ),
                 ),
                 textLabelInput(
                   'Confirmar',
                 ),
-                // CustomInputForm(
-                //   controller: _confirmPasswordController,
-                //   icon: Icons.lock_outline,
-                //   suffixIcon: IconButton(
-                //     color: Colors.black.withOpacity(.7),
-                //     onPressed: () {
-                //       setState(
-                //         () {
-                //           _isObscure = !_isObscure;
-                //         },
-                //       );
-                //     },
-                //     icon: Icon(
-                //       _isObscure ? Icons.visibility : Icons.visibility_off,
-                //     ),
-                //   ),
-                //   hint: "Confirmar Senha",
-                //   keyboardType: TextInputType.text,
-                //   obscureText: _isObscure,
-                //   validator: (val) => combine(
-                //     [
-                //       () => confirmPassword(
-                //           val,
-                //           val != _passwordController.text
-                //               ? 'As senhas devem ser iguais'
-                //               : '3232'),
-                //
-                //     ],
-                //   ),
-                // ),
+                CustomInputForm(
+                  controller: _confirmPasswordController,
+                  icon: Icons.lock_outline,
+                  suffixIcon: IconButton(
+                    color: Colors.black.withOpacity(.7),
+                    onPressed: () {
+                      setState(
+                        () {
+                          _isObscure = !_isObscure;
+                        },
+                      );
+                    },
+                    icon: Icon(
+                      _isObscure ? Icons.visibility : Icons.visibility_off,
+                    ),
+                  ),
+                  hint: "Confirmar Senha",
+                  keyboardType: TextInputType.text,
+                  obscureText: _isObscure,
+                  validator: (val) => combine(
+                    [
+                      () => isNotEmpty(val, 'Informe uma senha'),
+                      () => confirmPassword(_confirmPasswordController.text,
+                          _passwordController.text, 'As senhas são diferentes')
+                    ],
+                  ),
+                ),
                 CustomdButtonFormWidget(
-                    buttonText: 'Cadastrar',
-                    width: WidgetSizeConfig.screenWidth! * 10,
-                    onpressed: () async {
-                      //   if (_formKey.currentState!.validate()) {
-                      FocusScope.of(context)
-                          .unfocus(); //to hide the keyboard - if any
+                  buttonText: 'Cadastrar',
+                  width: WidgetSizeConfig.screenWidth! * 10,
+                  onpressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      FocusScope.of(context).unfocus();
                       await authProvider.registerWithEmailAndPassword(
                           user, context);
-                    }),
+                    }
+                  },
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 15),
-                  child: Center(child: _buildSignupBtn()
-
-
-                      ),
+                  child: Center(child: _buildSignupBtn()),
                 ),
-
                 CustomOutlinedButton(
                   color: Colors.teal,
                   height: 50,
                   width: 150,
                   text: 'Entrar',
-                    onPressed: () {
-          Navigator.of(context).pushReplacementNamed(Routes.login);
-          },
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed(Routes.login);
+                  },
                 ),
-
               ],
             ),
           ),

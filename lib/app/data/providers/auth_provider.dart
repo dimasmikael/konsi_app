@@ -3,42 +3,34 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:konsi_app/app/data/models/user_model.dart';
 import 'package:konsi_app/app/routes/routes.dart';
-import 'package:konsi_app/app/ui/android/components/alerts/alert.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:konsi_app/app/utils/constants.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  final Alert _alert = Alert();
-
-  User? loggedUser;
-  GoogleSignInAccount? loggedUserGoogle;
-  bool mounted = false;
-
   Future registerWithEmailAndPassword(
       UserModel? user, BuildContext? context) async {
     try {
       notifyListeners();
-      _auth
+      auth
           .createUserWithEmailAndPassword(
-              email: user!.email, password: user.password)
+              email: user!.email.toString().trim(),
+              password: user.password.toString().trim())
           .then(
         (firebaseUser) {
           Navigator.pushReplacementNamed(context!, Routes.home);
         },
       );
-      _alert.success(context!, 'Login cadastrado com sucesso');
     } on FirebaseAuthException catch (error) {
       print(error);
       notifyListeners();
-      _alert.error(
+      alert.error(
         context!,
         error.toString(),
       );
     } catch (e) {
       notifyListeners();
       print(e);
-      _alert.error(
+      alert.error(
         context!,
         e.toString(),
       );
@@ -49,7 +41,7 @@ class AuthProvider extends ChangeNotifier {
   Future signInWithEmailAndPassword(
       UserModel? user, BuildContext context) async {
     try {
-      await _auth
+      await auth
           .signInWithEmailAndPassword(
               email: user!.email, password: user!.password)
           .then(
@@ -59,18 +51,18 @@ class AuthProvider extends ChangeNotifier {
       );
       notifyListeners();
 
-      _alert.success(context!, 'Sucesso!');
+      alert.success(context!, 'Sucesso!');
     } on FirebaseAuthException catch (error) {
       notifyListeners();
       print(error);
-      _alert.error(
+      alert.error(
         context!,
         error.toString(),
       );
     } catch (e) {
       notifyListeners();
       print(e);
-      _alert.error(
+      alert.error(
         context!,
         e.toString(),
       );
@@ -80,7 +72,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future signOut(BuildContext context, [bool mounted = true]) async {
     try {
-      await _auth.signOut().then(
+      await auth.signOut().then(
         (firebaseUser) {
           Navigator.of(context).pushNamedAndRemoveUntil(
               Routes.login, (Route<dynamic> route) => false);
@@ -88,18 +80,18 @@ class AuthProvider extends ChangeNotifier {
       );
       notifyListeners();
       if (!mounted) return;
-      _alert.success(context, 'Deslogado com sucesso');
+      alert.success(context, 'Deslogado com sucesso');
     } on FirebaseAuthException catch (error) {
       notifyListeners();
       print(error);
-      _alert.error(
+      alert.error(
         context,
         error.toString(),
       );
     } catch (e) {
       notifyListeners();
       print(e);
-      _alert.error(
+      alert.error(
         context,
         e.toString(),
       );
@@ -147,14 +139,14 @@ class AuthProvider extends ChangeNotifier {
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             if (!mounted) {}
-            _alert.error(
+            alert.error(
               context,
               'The account already exists with a different credential',
             );
             notifyListeners();
           } else if (e.code == 'invalid-credential') {
             if (!mounted) {}
-            _alert.error(
+            alert.error(
               context,
               'Error occurred while accessing credentials. Try again.',
             );
@@ -162,7 +154,7 @@ class AuthProvider extends ChangeNotifier {
           }
         } catch (e) {
           if (!mounted) {}
-          _alert.error(
+          alert.error(
             context,
             'Error occurred using Google Sign In. Try again.',
           );
@@ -176,29 +168,17 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOutGoogle({required BuildContext context}) async {
     try {
-      print(1);
-      //   if (!kIsWeb) {
       await googleSignIn.signOut().then((google) {
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.login, (Route<dynamic> route) => false);
       });
       notifyListeners();
-      // }
-      //  await _auth.signOut();
-      // await googleSignIn.signOut();
     } catch (e) {
-      print(2);
-      _alert.error(
+      alert.error(
         context,
         'Error signing out. Try again.',
       );
       notifyListeners();
     }
   }
-
-  // checkLoggedUserGoogle() {
-  //   loggedUserGoogle = googleSignIn.currentUser;
-  //
-  //   return loggedUserGoogle;
-  // }
 }

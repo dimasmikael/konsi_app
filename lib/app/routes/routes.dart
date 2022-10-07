@@ -21,7 +21,7 @@ class Routes {
     login: (BuildContext context) => const SigninPage(),
     register: (BuildContext context) => const RegistrationPage(),
     home: (BuildContext context) => const HomePage(),
-    addressSearch: (BuildContext context) =>  const AddressSearchPage(),
-    myAddress: (BuildContext context) =>  const MyAddressPage(),
+    addressSearch: (BuildContext context) => const AddressSearchPage(),
+    myAddress: (BuildContext context) => const MyAddressPage(),
   };
 }

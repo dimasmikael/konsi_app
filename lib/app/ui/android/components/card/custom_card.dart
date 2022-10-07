@@ -4,11 +4,11 @@ import 'package:konsi_app/app/ui/android/components/widget_size_configuration/si
 class CustomCard extends StatelessWidget {
   const CustomCard(
       {Key? key,
-        required this.text,
-        required this.colorIcon,
-        required this.colorCard,
-        required this.icon,
-        required this.onTap})
+      required this.text,
+      required this.colorIcon,
+      required this.colorCard,
+      required this.icon,
+      required this.onTap})
       : super(key: key);
 
   final String? text;
@@ -54,7 +54,7 @@ class CustomCard extends StatelessWidget {
                       child: Text(
                         text!,
                         style:
-                        const TextStyle(color: Colors.white, fontSize: 25),
+                            const TextStyle(color: Colors.white, fontSize: 25),
                       ),
                     )
                   ],

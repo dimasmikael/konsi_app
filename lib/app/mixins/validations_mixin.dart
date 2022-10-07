@@ -1,17 +1,21 @@
+import 'package:konsi_app/app/utils/constants.dart';
+
 mixin ValidationMixin {
   dynamic isNotEmpty(dynamic value, [dynamic message]) {
     if (value.isEmpty) return message ?? "Esse campo é obrigatório";
     return null;
   }
 
-  dynamic confirmPassword(dynamic value, [dynamic message]) {
-    if (value.isNotEmpty) return message ?? "Esse campo é obrigatório";
+  dynamic confirmPassword(String value, String password, [dynamic message]) {
+    if (value != password) return message ?? "Esse campo é obrigatório";
+
     return null;
   }
 
   dynamic hasSevenChars(dynamic value, [dynamic message]) {
-    if (value!.length < 7)
-      return message ?? "Você deve usar pelo menos 7 caracteres";
+    if (value!.length < 7) {
+      return message ?? "Esse campo é obrigatório";
+    }
     return null;
   }
 

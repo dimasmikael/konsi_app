@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:konsi_app/app/ui/android/components/appbar/custom_appbar.dart';
-import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
 import 'package:provider/provider.dart';
 import "dart:math";
 
@@ -15,67 +13,52 @@ class ConfigPage extends StatefulWidget {
 }
 
 class _ConfigPageState extends State<ConfigPage> {
-  //final LoadingWidget loadingWidget = LoadingWidget();
-  bool _isSigningIn = false;
-  @override
-  bool mounted = false;
-
   List names = ['Jerry', 'Mark', 'John', 'Maria', 'Paula', 'Livia'];
+
+  Container _buildDivider() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 8.0,
+      ),
+      width: double.infinity,
+      height: 1.0,
+      color: Colors.grey.shade300,
+    );
+  }
 
   _confirmSignOut(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     showPlatformDialog(
-        context: context,
-        builder: (_) => PlatformAlertDialog(
-              material: (_, PlatformTarget target) => MaterialAlertDialogData(
-                  backgroundColor: Theme.of(context).appBarTheme.color),
-              title: const Text("Atenção"),
-              content: const Text("Tem certeza que quer sair?"),
-              actions: <Widget>[
-                PlatformDialogAction(
-                  child: PlatformText(("Cancelar")),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                PlatformDialogAction(
-                  child: PlatformText(
-                    "Confirmar",
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      _isSigningIn = true;
-                    });
+      context: context,
+      builder: (_) => PlatformAlertDialog(
+        material: (_, PlatformTarget target) => MaterialAlertDialogData(
+            backgroundColor: Theme.of(context).appBarTheme.color),
+        title: const Text("Atenção"),
+        content: const Text("Tem certeza que quer sair?"),
+        actions: <Widget>[
+          PlatformDialogAction(
+            child: PlatformText(("Cancelar")),
+            onPressed: () => Navigator.pop(context),
+          ),
+          PlatformDialogAction(
+            child: PlatformText(
+              "Confirmar",
+            ),
+            onPressed: () async {
+              await authProvider.signOut(context);
 
-                    // await Future.delayed(const Duration(milliseconds: 5000),
-                    //     () {
-                    //   loadingWidget.openLoadingDialog(context, 'Saindo...');
-                    // });
-
-
-
-                    // if(authProvider.checkLoggedUser() == null){
-                    //   await authProvider.signOutGoogle(context: context);
-                    // }else{
-                    //   if (!mounted) {}
-                    await authProvider.signOut(context);
-                    // }
-
-                    if (!mounted) {}
-                    await Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.login, (Route<dynamic> route) => false);
-
-                    setState(() {
-                      _isSigningIn = false;
-                    });
-                  },
-                )
-              ],
-            ));
+              if (!mounted) {}
+              await Navigator.of(context).pushNamedAndRemoveUntil(
+                  Routes.login, (Route<dynamic> route) => false);
+            },
+          )
+        ],
+      ),
+    );
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SingleChildScrollView(
@@ -94,7 +77,7 @@ class _ConfigPageState extends State<ConfigPage> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(12.0),
                         child: CircleAvatar(
                           radius: 40,
@@ -127,17 +110,6 @@ class _ConfigPageState extends State<ConfigPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Container _buildDivider() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-      ),
-      width: double.infinity,
-      height: 1.0,
-      color: Colors.grey.shade300,
     );
   }
 }

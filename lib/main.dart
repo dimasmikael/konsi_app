@@ -22,8 +22,9 @@ void main() async {
           providers: [
             ChangeNotifierProvider<AuthProvider>(
               create: (context) => AuthProvider(),
-            ), ChangeNotifierProvider<AddressProvider >(
-              create: (context) => AddressProvider (),
+            ),
+            ChangeNotifierProvider<AddressProvider>(
+              create: (context) => AddressProvider(),
             ),
           ],
           child: MaterialApp(

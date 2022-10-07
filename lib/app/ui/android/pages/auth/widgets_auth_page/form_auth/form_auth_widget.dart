@@ -5,10 +5,8 @@ import 'package:konsi_app/app/data/providers/auth_provider.dart';
 import 'package:konsi_app/app/mixins/validations_mixin.dart';
 import 'package:konsi_app/app/routes/routes.dart';
 import 'package:konsi_app/app/ui/android/components/buttons/custom_outlined_buttonn.dart';
-
 import 'package:konsi_app/app/ui/android/components/form/custom_button.dart';
 import 'package:konsi_app/app/ui/android/components/form/custom_input.dart';
-import 'package:konsi_app/app/ui/android/components/loading/loading_widget.dart';
 import 'package:konsi_app/app/ui/android/components/style/text_style.dart';
 import 'package:konsi_app/app/ui/android/components/widget_size_configuration/size_config.dart';
 import 'package:konsi_app/app/ui/android/pages/auth/widgets_auth_page/form_auth/form_widget/google_button.dart';
@@ -20,13 +18,11 @@ class FormAuthnWidget extends StatefulWidget {
     required this.passwordTextController,
     required this.authProvider,
     required this.formKey,
-    required this.scaffoldKey,
   }) : super(key: key);
   final AuthProvider authProvider;
-  final GlobalKey<ScaffoldState> scaffoldKey;
-  final GlobalKey<FormState> formKey;
   TextEditingController? emailTextController = TextEditingController();
   TextEditingController? passwordTextController = TextEditingController();
+  final GlobalKey<FormState> formKey;
 
   @override
   State<FormAuthnWidget> createState() => _FormAuthnWidgetState();
@@ -36,7 +32,6 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
     with ValidationMixin {
   bool _isObscure = true;
   UserModel? user = UserModel();
-  // final LoadingWidget loadingWidget = LoadingWidget();
 
   Widget _buildSignInWithText() {
     return Column(
@@ -76,7 +71,6 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
                 fontWeight: FontWeight.w400,
               ),
             ),
-
             TextSpan(
               text: 'Cadastre-se aqui',
               style: TextStyle(
@@ -85,11 +79,6 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
                 fontWeight: FontWeight.bold,
               ),
             ),
-
-            // onPressed: () {
-            //   Navigator.of(context)
-            //       .pushReplacementNamed(Routes.register);
-            // },
           ],
         ),
       ),
@@ -131,8 +120,11 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
           'Senha',
         ),
         CustomInputForm(
-            validator: (val) =>
-                combine([() => isNotEmpty(val, 'Informe uma senha')]),
+            validator: (val) => combine(
+                  [
+                    () => isNotEmpty(val, 'Informe uma senha'),
+                  ],
+                ),
             controller: widget.passwordTextController,
             icon: Icons.lock_outline,
             suffixIcon: IconButton(
@@ -155,36 +147,12 @@ class _FormAuthnWidgetState extends State<FormAuthnWidget>
             buttonText: 'Entrar',
             width: WidgetSizeConfig.screenWidth! * 10,
             onpressed: () async {
-              //    if (widget.formKey.currentState!.validate()) {
-              FocusScope.of(context).unfocus(); //to hide the keyboard - if any
+              if (widget.formKey.currentState!.validate()) {
+                FocusScope.of(context).unfocus();
 
-              await widget.authProvider
-                  .signInWithEmailAndPassword(user, context);
-
-              // if (!status!) {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //     SnackBar(
-              //       content: const Text("textAlert(text)"),
-              //       backgroundColor: Colors.red,
-              //       action: SnackBarAction(
-              //         label: "",
-              //         textColor: Colors.white,
-              //         onPressed: () {},
-              //       ),
-              //     ),
-              //   );
-
-              // widget.scaffoldKey.currentState!._scaffoldMessenger.of(context).showSnackBar(SnackBar(
-              //   content: Text(AppLocalizations.of(context)
-              //       .translate("loginTxtErrorSignIn")),
-              // )
-              //   )//;
-              // } else {
-              //   if (mounted) {
-              //     Navigator.of(context).pushReplacementNamed(Routes.home);
-              //   }
-              // }
-              //   }
+                await widget.authProvider
+                    .signInWithEmailAndPassword(user, context);
+              }
             }),
         _buildSignInWithText(),
         const SizedBox(

@@ -5,14 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 Widget textFormSignIn(String text) {
   return Text(
     text,
-
     style: const TextStyle(
       color: Colors.black,
       fontFamily: 'OpenSans',
       fontSize: 30.0,
       fontWeight: FontWeight.bold,
     ),
-
   );
 }
 
@@ -42,7 +40,6 @@ Widget textLabelInput(String text) {
     ),
   );
 }
-
 
 Widget textAlert(String texto) {
   return Text(

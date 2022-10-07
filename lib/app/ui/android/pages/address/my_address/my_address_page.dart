@@ -27,7 +27,6 @@ class _MyAddressPageState extends State<MyAddressPage> {
 
   @override
   void initState() {
-    //_initData();
     super.initState();
   }
 
@@ -46,7 +45,6 @@ class _MyAddressPageState extends State<MyAddressPage> {
 
     WidgetsBinding.instance?.addPostFrameCallback(
       (_) async {
-        // Execute callback if page is mounted
         if (mounted) {
           await addressProvider.loadAddress(
               _idUserLogged!, _controllerStream, context);
@@ -54,11 +52,6 @@ class _MyAddressPageState extends State<MyAddressPage> {
         ;
       },
     );
-
-    // Future.delayed(Duration.zero, () async {
-    //   await addressProvider
-    //       .loadAddress(_idUserLogged!, _controllerStream, context);
-    // });
   }
 
   Future? _showRemovalDialog(BuildContext context, String id) {
@@ -98,12 +91,25 @@ class _MyAddressPageState extends State<MyAddressPage> {
     );
   }
 
+  Widget _loadingWithText() {
+    return Center(
+      child: Column(
+        children: const <Widget>[
+          Text("Carregando endereços"),
+          CircularProgressIndicator(
+            color: Colors.orangeAccent,
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetSizeConfig().init(context);
 
     double width = WidgetSizeConfig.screenWidth!;
-    double height = WidgetSizeConfig.screenHeight!;
+
     return Scaffold(
       appBar: const CustomAppBar(text: 'Meus Endereços'),
       body: StreamBuilder<QuerySnapshot>(
@@ -112,9 +118,7 @@ class _MyAddressPageState extends State<MyAddressPage> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Center(
-                child: LoadingWidget(),
-              );
+              return _loadingWithText();
 
             case ConnectionState.active:
             case ConnectionState.done:
@@ -135,42 +139,18 @@ class _MyAddressPageState extends State<MyAddressPage> {
                     AddressModel address =
                         AddressModel.fromDocumentSnapshot(documentSnapshot);
 
-                    print("address.address");
-                    print(address.address);
-
                     return MyAddressItem(
                       address: address,
                       index,
                       onPressedRemover: () {
-                     _showRemovalDialog(context, address.id);
+                        _showRemovalDialog(context, address.id);
                       },
                     );
-
-
                   },
                 ),
               );
           }
         },
-      ),
-
-    );
-  }
-}
-
-class LoadingWidget extends StatelessWidget {
-  LoadingWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: const <Widget>[
-          Text("Carregando endereços"),
-          CircularProgressIndicator(
-            color: Colors.orangeAccent,
-          )
-        ],
       ),
     );
   }
