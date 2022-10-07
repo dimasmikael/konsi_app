@@ -22,7 +22,7 @@ um endereço no mapa e salvar o mesmo.
 ![Mobile 10](https://github.com/dimasmikael/konsi_app/blob/master/lib/screenshots/config.jpg)
 
 ## Icon
-![Mobile 5](https://github.com/dimasmikael/sua_musica_desafio_games/blob/master/lib/screenshots/icon_app.png)
+![Mobile 11](https://github.com/dimasmikael/konsi_app/blob/master/lib/screenshots/icon_app.png)
 
 
 # Tecnologias utilizadas
